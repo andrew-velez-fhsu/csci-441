@@ -1,0 +1,120 @@
+{
+  "users": [
+    {
+      "id": "735b",
+      "displayName": "Andrew Velez",
+      "firstName": "Andrew",
+      "lastName": "Velez",
+      "uid": "tMXUkEQC4IX8NwRpGBwHz4niFOw1",
+      "email": "andrewjvelez+4@gmail.com",
+      "profileUrl": "https://firebasestorage.googleapis.com/v0/b/inf655final-av.appspot.com/o/01HX4ZH3QA13007T5JEDX6EDEP.jpg?alt=media&token=b6729d40-cf45-4775-b4c9-06fe9d1435d1"
+    },
+    {
+      "id": "1000",
+      "displayName": "Andrew Velez (Admin)",
+      "firstName": "Andrew",
+      "lastName": "Velez",
+      "uid": "oMxi1bPQjObWhrz1EiV8PRIOTMb2",
+      "email": "andrewjvelez@gmail.com",
+      "address1": "49 Browning Dr",
+      "address2": "",
+      "city": "Ossining",
+      "state": "NY",
+      "postalCode": "10562",
+      "profileUrl": "https://firebasestorage.googleapis.com/v0/b/inf655final-av.appspot.com/o/01HX4W9JW407V3Y61N56TGBQBN.png?alt=media&token=f8b28b8b-d8a2-4a28-ad18-9cb00d702802"
+    },
+    {
+      "id": "5dea",
+      "displayName": "Tamir Velez",
+      "firstName": "Tamir",
+      "lastName": "Velez",
+      "uid": "0BVWNnncglV0l47pFvArzXJXX8y1",
+      "email": "tamirvelez@gmail.com"
+    },
+    {
+      "id": "7c92",
+      "displayName": "Andrew Velez",
+      "firstName": "Andrew",
+      "lastName": "Velez",
+      "uid": "zvmmF88qiaXI81mQ23YivlmoHmy2",
+      "email": "andrewjvelez+1@gmail.com",
+      "city": "Ossining",
+      "state": "New York",
+      "postalCode": "10562"
+    }
+  ],
+  "pets": [
+    {
+      "id": "01HX5AJCZBTBM6J56BH5127QBE",
+      "uid": "oMxi1bPQjObWhrz1EiV8PRIOTMb2",
+      "name": "Zaydee",
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut aliquet ipsum quis scelerisque imperdiet. Quisque mauris augue, gravida a tincidunt at, ultrices a neque. Curabitur interdum quam non tellus iaculis interdum. Nam vehicula odio quis lacus elementum ultricies. Ut et sodales neque, id condimentum est. Morbi bibendum elementum nulla, et aliquet orci scelerisque a. Proin ut mauris finibus, faucibus tortor id, tempus elit.\n\nInteger ullamcorper semper tempus. Pellentesque ac augue molestie, condimentum tellus id, tempor lorem. Nulla molestie vel erat sit amet convallis. In hac habitasse platea dictumst. Sed pulvinar molestie aliquam. Praesent ultricies nisl nisi, eget ullamcorper ligula ullamcorper a. In tincidunt, nulla sed facilisis ullamcorper, dui diam dapibus est, in gravida eros turpis ut augue. Proin tincidunt ipsum non ante euismod, sit amet facilisis nibh hendrerit. Nulla pellentesque nisl a aliquam tempus. Ut ut orci luctus, dapibus justo et, fringilla mi. Praesent congue sit amet metus vitae mattis. Aenean vel quam eu augue convallis ultrices. Pellentesque mattis mollis pellentesque. Etiam fermentum, quam at vestibulum feugiat, sem metus malesuada ante, at eleifend mi neque sed est. Proin tempor lobortis tempor.",
+      "breed": "Pitbull mix",
+      "birthday": "2019-10-01T04:00:00.000Z",
+      "photoUrl": "https://firebasestorage.googleapis.com/v0/b/inf655final-av.appspot.com/o/pets%2F01HX5HQB91SM7G3BANG1JSTSNE.jpg?alt=media&token=d222cc28-9ce1-4e9e-9492-6bf6bd35615c",
+      "isGoodWithChildren": true,
+      "isResourceProtective": true,
+      "profileUrl": "https://firebasestorage.googleapis.com/v0/b/inf655final-av.appspot.com/o/pets%2F01HX5GWX6Q94PYH2CBB8GW4EDJ.jpg?alt=media&token=0e51bf99-230c-4ab2-82b3-866ce8de79cd",
+      "location": "Ossining, NY"
+    },
+    {
+      "id": "01HX5B15JB1QQR632Z3KR7GBS1",
+      "uid": "oMxi1bPQjObWhrz1EiV8PRIOTMb2",
+      "name": "Captain Turbo",
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean ut est venenatis, luctus nunc et, efficitur nisl. Aenean rhoncus cursus dolor. Quisque sed lectus nec mi faucibus pellentesque. Donec at magna sit amet magna bibendum malesuada. In quis cursus nisi. Praesent venenatis posuere dolor eu hendrerit. Duis elementum sollicitudin augue quis pharetra. Sed et eros vitae mi blandit viverra a eu tortor. Vivamus tincidunt sollicitudin est, vitae eleifend turpis iaculis ac. Pellentesque tempus sagittis odio, sed vehicula elit vestibulum eu. Sed ac aliquet ante, feugiat gravida magna.",
+      "breed": "Golden Retriever",
+      "birthday": "2024-01-01T05:00:00.000Z",
+      "photoUrl": "https://firebasestorage.googleapis.com/v0/b/inf655final-av.appspot.com/o/pets%2F01HX5FWQWT4E1WCM13DRD230G1.jpg?alt=media&token=9b7ebfe3-5d31-4cb5-ba04-d10d84d4c2c7",
+      "isGoodWithChildren": true,
+      "isResourceProtective": false,
+      "location": "Ossining, NY"
+    },
+    {
+      "uid": "oMxi1bPQjObWhrz1EiV8PRIOTMb2",
+      "id": "01HX5GG4WW1NJGQW3VAZDHGYG1",
+      "name": "Bonkers",
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean ut est venenatis, luctus nunc et, efficitur nisl. Aenean rhoncus cursus dolor. Quisque sed lectus nec mi faucibus pellentesque. Donec at magna sit amet magna bibendum malesuada. In quis cursus nisi. Praesent venenatis posuere dolor eu hendrerit. Duis elementum sollicitudin augue quis pharetra. Sed et eros vitae mi blandit viverra a eu tortor. Vivamus tincidunt sollicitudin est, vitae eleifend turpis iaculis ac. Pellentesque tempus sagittis odio, sed vehicula elit vestibulum eu. Sed ac aliquet ante, feugiat gravida magna.",
+      "breed": "Mixed",
+      "birthday": "2023-07-15T04:00:00.000Z",
+      "photoUrl": "https://firebasestorage.googleapis.com/v0/b/inf655final-av.appspot.com/o/pets%2F01HX5GJ534BP7JX7RZHCC2W67R.jpg?alt=media&token=9e31bb5d-0032-4d84-b56c-a5a4d002d1eb",
+      "isGoodWithChildren": true,
+      "isResourceProtective": false,
+      "location": "Ossining, NY"
+    },
+    {
+      "uid": "0BVWNnncglV0l47pFvArzXJXX8y1",
+      "id": "01HX5JRC2DT7N171DG01THDMMD",
+      "name": "Gypsy",
+      "description": "woof",
+      "breed": "woofy",
+      "birthday": null,
+      "photoUrl": "https://firebasestorage.googleapis.com/v0/b/inf655final-av.appspot.com/o/pets%2F01HX5JSQY6FDMY51TC0BX7XSZK.jpg?alt=media&token=e3964bb6-d900-4503-9828-36dde92f306b",
+      "isGoodWithChildren": false,
+      "isResourceProtective": false
+    },
+    {
+      "uid": "zvmmF88qiaXI81mQ23YivlmoHmy2",
+      "id": "01HX7443QSQDDHTDV4T2N1J5Z9",
+      "name": "Beau",
+      "description": "I'm a purebreed poodle who defers to my little sister, Kora",
+      "breed": "Poodle",
+      "birthday": "2016-01-01T05:00:00.000Z",
+      "photoUrl": null,
+      "isGoodWithChildren": false,
+      "isResourceProtective": false,
+      "location": "Ossining, New York"
+    },
+    {
+      "uid": "oMxi1bPQjObWhrz1EiV8PRIOTMb2",
+      "id": "01HX7NNRJJFVWCXQ2K9871YFFG",
+      "name": "Rocket",
+      "description": "I'm a racoon",
+      "breed": "Racoon",
+      "birthday": "2005-12-15T05:00:00.000Z",
+      "photoUrl": null,
+      "isGoodWithChildren": false,
+      "isResourceProtective": false,
+      "location": "Ossining, NY"
+    }
+  ]
+}

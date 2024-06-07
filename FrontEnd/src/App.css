@@ -1,0 +1,69 @@
+@import url('https://fonts.googleapis.com/css2?family=Yellowtail&display=swap');
+body{
+  background-color: #B2F0EF;
+}
+
+
+.navBar{
+  position: relative;
+}
+.navBarRight{
+  position: absolute;
+  right: 10px;
+
+}
+
+.modal, .form{
+  padding: 20px;
+}
+
+.field{
+  margin: 20px;
+}
+
+.footer{
+  margin-top: 3rem;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  background-color: #f7f7f7;
+}
+
+.links{
+  padding-top: 30px;
+  padding-bottom: 15px;
+}
+
+.navigation ul{
+  list-style-type: none;
+  margin:10px;  
+  padding-left: 0;
+}
+
+.navigation ul li{
+  font-family: Roboto, Arial, Helvetica, sans-serif;
+  padding:10px;    
+}
+
+.navItem{
+  color:inherit;
+  text-decoration: none;
+}
+
+.navItem:hover{
+  text-decoration: underline;
+}
+
+.pet-profile{
+  max-height: 400px;
+  width: 100%;
+  object-fit: cover;
+  border-radius: 20px;
+  border: 1px solid #666;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.details-icon{
+  color: #1976d2;
+}
