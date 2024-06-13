@@ -1,5 +1,6 @@
 package edu.fhsu.summer.csci441.group1.ZoomBuddy.model;
 
+
 import jakarta.persistence.*;
 
 @Entity
@@ -22,11 +23,9 @@ public class User {
     private String postalCode;
     private String profileUrl;
 
-
     public User(){
 
     }
-
     public void setDisplayName(String displayName){
         this.displayName = displayName;
     }
