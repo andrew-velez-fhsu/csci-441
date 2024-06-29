@@ -10,7 +10,7 @@ public class HelloController {
     @GetMapping("/")
     public User index() {
         var user = new User();
-        user.setUserName("Test User");
+        user.setDisplayName("Test User");
         return user;
     }
 

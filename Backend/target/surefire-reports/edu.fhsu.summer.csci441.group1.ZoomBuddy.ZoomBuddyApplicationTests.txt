@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: edu.fhsu.summer.csci441.group1.ZoomBuddy.ZoomBuddyApplicationTests
+-------------------------------------------------------------------------------
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.497 s -- in edu.fhsu.summer.csci441.group1.ZoomBuddy.ZoomBuddyApplicationTests
