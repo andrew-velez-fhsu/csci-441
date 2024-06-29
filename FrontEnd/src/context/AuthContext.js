@@ -15,6 +15,8 @@ const UserContext = createContext();
 
 export const AuthContextProvider = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userId, setUserId] = useState(null);
+  const [bearerToken, setBearerToken] = useState("");
 
   const updateUser = async (record) => {
     await updateProfile(auth.currentUser, {
@@ -23,9 +25,12 @@ export const AuthContextProvider = ({ children }) => {
       lastName: record.lastName,
     });
 
-    await fetch(`${process.env.REACT_APP_API_URL}/users/${record.id}`, {
+    await fetch(`${process.env.REACT_APP_API}/users/${userId}`, {
       method: "PUT",
-      headers: { "Content-type": "application/json" },
+      headers: {
+        "Content-type": "application/json",
+        Authorization: `Bearer ${bearerToken}`,
+      },
       body: JSON.stringify(record),
     });
   };
@@ -33,6 +38,7 @@ export const AuthContextProvider = ({ children }) => {
   const registerNewUser = async (email, password, firstName, lastName) => {
     await setPersistence(auth, browserLocalPersistence);
     let token = await createUserWithEmailAndPassword(auth, email, password);
+    setBearerToken(token.user.accessToken);
 
     await updateProfile(auth.currentUser, {
       displayName: `${firstName} ${lastName}`,
@@ -48,20 +54,38 @@ export const AuthContextProvider = ({ children }) => {
       uid: token.user.uid,
       email: email,
     };
-    await fetch(`${process.env.REACT_APP_API_URL}/users`, {
+    let user = await fetch(`${process.env.REACT_APP_API}/users`, {
       method: "POST",
-      headers: { "Content-type": "application/json" },
+      headers: {
+        "Content-type": "application/json",
+        Authorization: `Bearer ${bearerToken}`,
+      },
       body: JSON.stringify(userRecord),
     });
-    setIsLoggedIn(true);
+    //setIsLoggedIn(true);
+    setUserId(user["id"]);
     return token.user;
   };
 
-  const getUserId = () => {
+  // const getUserId = () => {
+  //   const user = auth.currentUser;
+  //   if (user) {
+  //     setIsLoggedIn(true);
+  //     setUserId(user.uid)
+  //     return user.uid;
+  //   } else {
+  //     setIsLoggedIn(false);
+  //     return false;
+  //   }
+  // };
+
+  const userIsLoggedIn = () => {
     const user = auth.currentUser;
     if (user) {
       setIsLoggedIn(true);
-      return user.uid;
+      setUserId(user.uid);
+      setBearerToken(user.accessToken);
+      return true;
     } else {
       setIsLoggedIn(false);
       return false;
@@ -79,16 +103,24 @@ export const AuthContextProvider = ({ children }) => {
 
   const getProfile = async () => {
     const token = getAuth();
-    const currentUser = token.currentUser;
-    if (currentUser) {
-      const userRecords = await (
-        await fetch(`${process.env.REACT_APP_API_URL}/users`)
-      ).json();
-      const userRecord = userRecords.find(
-        (user) => user.uid === currentUser.uid
-      );
-      if (!userRecord) throw new Error("Unable to find user id");
-      return userRecord;
+
+    if (token?.currentUser?.uid) {
+      try {
+        const userId = token.currentUser.uid;
+        const getUserUri = `${process.env.REACT_APP_API}/users/${userId}`;
+        const userRecordResp = await fetch(getUserUri, {
+          method: "GET",
+          headers: {
+            "Content-type": "application/json",
+            Authorization: `Bearer ${bearerToken}`,
+          },
+        });
+        const userRecord = userRecordResp.json();
+        if (!userRecord) throw new Error("Unable to find user id");
+        return userRecord;
+      } catch (eX) {
+        console.error(eX);
+      }
     } else {
       return false;
     }
@@ -98,10 +130,12 @@ export const AuthContextProvider = ({ children }) => {
     await setPersistence(auth, browserSessionPersistence);
     let token = await signInWithEmailAndPassword(auth, email, password);
     setIsLoggedIn(true);
+    setUserId(token.user.uid);
+    setBearerToken(token.user.accessToken);
   };
 
   const logout = () => {
-    setIsLoggedIn(false);
+    //setIsLoggedIn(false);
     return signOut(auth);
   };
 
@@ -112,10 +146,11 @@ export const AuthContextProvider = ({ children }) => {
         signIn,
         logout,
         updateUser,
-        getUserId,
         getProfile,
         getCurrentUserDisplayName,
         isLoggedIn,
+        userIsLoggedIn,
+        userId,
       }}
     >
       {children}

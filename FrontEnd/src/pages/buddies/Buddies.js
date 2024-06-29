@@ -11,13 +11,11 @@ import EditBuddy from "../../components/EditBuddy";
 export default function Buddies() {
   const { getPetsByUser, addNewPet } = Pets();
 
-  const { getUserId } = UserAuth();
+  const { userId } = UserAuth();
   const [buddies, setBuddies] = useState([]);
 
-  const uid = getUserId();
-
   const getPets = async () => {
-    const myPets = await getPetsByUser(uid);
+    const myPets = await getPetsByUser(userId);
     setBuddies(myPets);
   };
 
@@ -26,7 +24,7 @@ export default function Buddies() {
   }, []);
 
   const handleAddBuddy = async () => {
-    const newPet = await addNewPet(uid);
+    const newPet = await addNewPet(userId);
     setBuddies([newPet, ...buddies]);
   };
 

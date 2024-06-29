@@ -1,5 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import Login from "./Login";
+
 import {
   AppBar,
   Box,
@@ -15,7 +16,7 @@ import { UserAuth } from "../context/AuthContext";
 import { useState } from "react";
 
 export default function Header() {
-  const { logout, getUserId, isLoggedIn } = UserAuth();
+  const { logout, isLoggedIn } = UserAuth();
   const [anchorMenu, setAnchorMenu] = useState(null);
 
   const navigate = useNavigate();
@@ -44,19 +45,21 @@ export default function Header() {
           sx={{ backgroundColor: "#fefefe", color: "#111111" }}
         >
           <Toolbar>
-            <Typography
-              variant="h3"
-              component="h1"
-              sx={{
-                fontFamily: "Yellowtail, Verdana, Geneva, Tahoma, sans-serif",
-                WebkitTextStrokeWidth: "1px",
-                WebkitTextStrokeColor: "#333333",
-                color: "goldenrod",
-                marginRight: "2rem",
-              }}
-            >
-              Zoomy Buddy
-            </Typography>
+            <Link to="/" className="headerLink">
+              <Typography
+                variant="h3"
+                component="h1"
+                sx={{
+                  fontFamily: "Yellowtail, Verdana, Geneva, Tahoma, sans-serif",
+                  WebkitTextStrokeWidth: "1px",
+                  WebkitTextStrokeColor: "#333333",
+                  color: "goldenrod",
+                  marginRight: "2rem",
+                }}
+              >
+                Zoomy Buddy
+              </Typography>
+            </Link>
             <Typography
               className="subTitle"
               variant="subtitle1"

@@ -12,7 +12,7 @@ import { Storage } from "../../context/StorageContext";
 import { AddAPhoto } from "@mui/icons-material";
 
 export default function Profile() {
-  const { getProfile, getUserId, updateUser } = UserAuth();
+  const { getProfile, updateUser } = UserAuth();
   const { uploadFile } = Storage();
 
   const [firstName, setFirstName] = useState("");
@@ -32,15 +32,19 @@ export default function Profile() {
 
   const loadProfile = async () => {
     const pro = await getProfile();
-    setProfile(pro);
-    setFirstName(pro.firstName);
-    setLastName(pro.lastName);
-    setEmail(pro.email);
-    setAddress1(pro.address1);
-    setAddress2(pro.address2);
-    setCity(pro.city);
-    setState(pro.state);
-    setPostalCode(pro.postalCode);
+    if (pro) {
+      setProfile(pro);
+      setFirstName(pro.firstName);
+      setLastName(pro.lastName);
+      setEmail(pro.email);
+      setAddress1(pro.address1);
+      setAddress2(pro.address2);
+      setCity(pro.city);
+      setState(pro.state);
+      setPostalCode(pro.postalCode);
+    } else {
+      console.error("Profile not found");
+    }
   };
 
   useEffect(() => {
@@ -88,11 +92,15 @@ export default function Profile() {
 
   const handleProfileUpload = async (event) => {
     const file = event.target.files[0];
+    if (!profile) await loadProfile();
+
     try {
       const profileUrl = await uploadFile(file, "profile");
       //add to profile
-      const profile = { ...profile, profileUrl };
-      await updateUser(profile);
+      const profileWithPicture = { ...profile, profileUrl };
+
+      await updateUser(profileWithPicture);
+      setProfile(profileWithPicture);
     } catch (err) {
       console.warn(err);
     }

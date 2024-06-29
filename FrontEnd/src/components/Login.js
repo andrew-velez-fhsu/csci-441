@@ -19,9 +19,8 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoginFailed, setIsLoginFailed] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  const { signIn, getUserId } = UserAuth();
+  const { signIn, userIsLoggedIn, isLoggedIn } = UserAuth();
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -59,11 +58,11 @@ export default function Login() {
     }
   };
 
-  useEffect(() => {
-    const userIsLoggedIn = getUserId();
-    console.log("user logged in", userIsLoggedIn);
-    setIsLoggedIn(getUserId());
-  }, [getUserId]);
+  // useEffect(() => {
+  //   const loggedIn = userIsLoggedIn();
+  //   //console.log("user logged in", loggedIn);
+  //   //setIsLoggedIn(loggedIn);
+  // }, []);
 
   const authenticationButton = () => {
     if (isLoggedIn) {
