@@ -13,12 +13,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @SpringBootApplication
-public class ZoomBuddyApplication {
+public class ZoomyBuddyApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(ZoomBuddyApplication.class, args);
+		SpringApplication.run(ZoomyBuddyApplication.class, args);
 	}
-	private static final Logger log = LoggerFactory.getLogger(ZoomBuddyApplication.class);
+	private static final Logger log = LoggerFactory.getLogger(ZoomyBuddyApplication.class);
 
 	@Bean
 	public CommandLineRunner commandLineRunner(ApplicationContext ctx) {

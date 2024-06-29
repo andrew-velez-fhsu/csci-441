@@ -35,9 +35,7 @@ public class UserController {
     }
 
     @PutMapping("/users/{uid}")
-    public User updatedUser(@PathVariable("uid") String uid, Authentication auth, @RequestBody User user) {
-        //var user = this.usersRepository.findByFirebaseUid(uid);
-
+    public User updateUser(@PathVariable("uid") String uid, Authentication auth, @RequestBody User user) {
         if (user != null && uid.equals(user.getUid()))
             return this.usersRepository.save(user);
         else if (user != null && !uid.equals(user.getUid()))
