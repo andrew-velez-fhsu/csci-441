@@ -16,3 +16,10 @@ Mac/Linux: `export WEB_PASSWORD="{Your secure password}"`
 
 
 To Run: `./mvnw spring-boot:run`
+
+The step to create a new entity are:
+1) Create SQL Table Pets - in data studio
+2) Create Java Model Pet class
+3) Create Java Repository PetsRepository interface
+4) Create Controller PetController class
+
