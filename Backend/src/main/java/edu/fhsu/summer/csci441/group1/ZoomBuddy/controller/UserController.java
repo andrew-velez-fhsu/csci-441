@@ -50,11 +50,6 @@ public class UserController {
             );
     }
 
-    //@GetMapping("/users/{id}")
-    //public User findUser(int id){
-    //   return this.usersRepository.findById(id);
-    //}
-
     @PostMapping("/users")
     public User addUser(@RequestBody User user) {
         return this.usersRepository.save(user);
