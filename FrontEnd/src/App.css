@@ -67,3 +67,7 @@ body{
 .details-icon{
   color: #1976d2;
 }
+
+.headerLink{
+  text-decoration: none;
+}

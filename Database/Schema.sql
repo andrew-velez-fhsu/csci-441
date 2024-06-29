@@ -9,6 +9,7 @@ CREATE DATABASE zoomybuddy;
 CREATE USER web;
 -- This will allow the user to do all actions on all tables
 GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public to web;
+GRANT USAGE ON SEQUENCE users_id_seq TO web;
 
 
 
