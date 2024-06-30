@@ -1,6 +1,7 @@
 package edu.fhsu.summer.csci441.group1.ZoomBuddy.data;
 
-import edu.fhsu.summer.csci441.group1.ZoomBuddy.model.User;
+import java.util.Optional;
+
 import org.springframework.data.repository.NoRepositoryBean;
 import org.springframework.data.repository.Repository;
 
@@ -13,7 +14,6 @@ public interface CrudRepository<T, ID> extends Repository<T, ID> {
 
     <S extends T> Iterable<S> saveAll(Iterable<S> entities);
 
-   // User findById(ID id);
     Optional<T> findById(ID id);
 
     boolean existsById(ID id);

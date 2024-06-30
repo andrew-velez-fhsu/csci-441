@@ -1,0 +1,14 @@
+{
+  "configurations": [
+    {
+      "type": "java",
+      "name": "Spring Boot-ZoomyBuddyApplication<ZoomBuddy>",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "mainClass": "edu.fhsu.summer.csci441.group1.ZoomBuddy.ZoomyBuddyApplication",
+      "projectName": "ZoomBuddy",
+      "args": "",
+      "envFile": "${workspaceFolder}/.env"
+    }
+  ]
+}
