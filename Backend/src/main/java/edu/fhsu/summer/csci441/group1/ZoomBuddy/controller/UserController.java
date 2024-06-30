@@ -13,7 +13,6 @@ public class UserController {
 
     private final UsersRepository usersRepository;
 
-
     public UserController(UsersRepository usersRepository) {
         this.usersRepository = usersRepository;
     }
@@ -30,8 +29,7 @@ public class UserController {
             return user;
         else
             throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "User not found"
-            );
+                    HttpStatus.NOT_FOUND, "User not found");
     }
 
     @PutMapping("/users/{uid}")
@@ -40,16 +38,19 @@ public class UserController {
             return this.usersRepository.save(user);
         else if (user != null && !uid.equals(user.getUid()))
             throw new ResponseStatusException(
-                    HttpStatus.BAD_REQUEST, "User Id does not match user"
-                    );
+                    HttpStatus.BAD_REQUEST, "User Id does not match user");
         else
             throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "User not found"
-            );
+                    HttpStatus.NOT_FOUND, "User not found");
     }
 
     @PostMapping("/users")
     public User addUser(@RequestBody User user) {
         return this.usersRepository.save(user);
+    }
+
+    @DeleteMapping("/users/{uid}")
+    public void deleteUser(@PathVariable("uid") String uid, Authentication auth) {
+        throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Not implemented");
     }
 }
