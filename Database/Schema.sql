@@ -54,10 +54,11 @@ CREATE TABLE IF NOT EXISTS public.pets(
     description TEXT,
     breed VARCHAR (80),
     birthday DATE,
-    photoUrl VARCHAR,
     isGoodWithChildren boolean,
     isResourceProtective boolean
 );
+
+-- DROP TABLE public.pets
 
 -- This will allow the user to do all actions on all tables
 GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public to web;
