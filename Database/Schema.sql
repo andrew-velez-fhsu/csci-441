@@ -7,9 +7,7 @@ CREATE DATABASE zoomybuddy;
 -- Create a user account for the web site service
 -- Best practice is to not log in with super user
 CREATE USER web;
--- This will allow the user to do all actions on all tables
-GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public to web;
-GRANT USAGE ON SEQUENCE users_id_seq TO web;
+
 
 
 
@@ -46,5 +44,23 @@ CREATE TABLE IF NOT EXISTS public.users(
     state varchar(100), 
     postalcode varchar(20),
     profileurl varchar
-)
+);
 
+-- need to create a pet table here
+CREATE TABLE IF NOT EXISTS public.pets(
+    id SERIAL PRIMARY KEY,
+    uid VARCHAR(36) NOT NULL UNIQUE,
+    name VARCHAR(50) NOT NULL,
+    description TEXT,
+    breed VARCHAR (80),
+    birthday DATE,
+    isGoodWithChildren boolean,
+    isResourceProtective boolean
+);
+
+-- DROP TABLE public.pets
+
+-- This will allow the user to do all actions on all tables
+GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public to web;
+GRANT USAGE ON SEQUENCE users_id_seq TO web;
+GRANT USAGE ON SEQUENCE pets_id_seq TO web;
