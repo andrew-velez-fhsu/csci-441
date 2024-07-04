@@ -1,17 +1,14 @@
 package edu.fhsu.summer.csci441.group1.ZoomBuddy.model;
 
-
 import jakarta.persistence.*;
 
 @Entity
-@Table(name="users")
+@Table(name = "users")
 public class User {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String displayName;
-
     private String firstName;
     private String lastName;
     private String uid;
@@ -23,10 +20,11 @@ public class User {
     private String postalCode;
     private String profileUrl;
 
-    public User(){
+    public User() {
 
     }
-    public void setDisplayName(String displayName){
+
+    public void setDisplayName(String displayName) {
         this.displayName = displayName;
     }
 

@@ -20,7 +20,7 @@ import { Pets } from "../context/PetsContext";
 import { UserAuth } from "../context/AuthContext";
 import dayjs from "dayjs";
 
-export default function EditBuddy({ buddy }) {
+export default function EditBuddy({ buddy, handleDeletePet }) {
   const [userProfile, setUserProfile] = useState(null);
   const [buddyProfile, setBuddyProfile] = useState(buddy);
   const [name, setName] = useState(buddyProfile.name ? buddyProfile.name : "");
@@ -47,7 +47,6 @@ export default function EditBuddy({ buddy }) {
   );
   const [errName, setErrName] = useState(false);
   const [errDescription, setErrDescription] = useState(false);
-  const [errBreed, setErrBreed] = useState(false);
   const [isSaved, setIsSaved] = useState(false);
 
   const { uploadFile } = Storage();
@@ -56,7 +55,7 @@ export default function EditBuddy({ buddy }) {
 
   useEffect(() => {
     getProfile().then((profile) => setUserProfile(profile));
-  }, []);
+  }, [getProfile]);
 
   const VisuallyHiddenInput = styled("input")({
     clip: "rect(0 0 0 0)",
@@ -91,19 +90,29 @@ export default function EditBuddy({ buddy }) {
   };
 
   const savePet = async () => {
-    const updatedPet = {
-      ...buddyProfile,
-      name,
-      description,
-      breed,
-      birthday,
-      photoUrl,
-      isGoodWithChildren,
-      isResourceProtective,
-    };
-    await updatePet(updatedPet, userProfile);
-    setBuddyProfile(updatedPet);
-    setIsSaved(true);
+    //reset validation
+    setErrName(false);
+    setErrDescription(false);
+
+    //check that we have required fields
+    if (name === "") setErrName(true);
+    if (description === "") setErrDescription(true);
+
+    if (name && description) {
+      const updatedPet = {
+        ...buddyProfile,
+        name,
+        description,
+        breed,
+        birthday,
+        photoUrl,
+        isGoodWithChildren,
+        isResourceProtective,
+      };
+      await updatePet(updatedPet);
+      setBuddyProfile(updatedPet);
+      setIsSaved(true);
+    }
   };
 
   const handleSavePet = async (e) => {
@@ -212,7 +221,11 @@ export default function EditBuddy({ buddy }) {
                 anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
               />
             </form>
-            <Button variant="secondary" startIcon={<Delete />}>
+            <Button
+              variant="secondary"
+              startIcon={<Delete />}
+              onClick={(e) => handleDeletePet(buddyProfile)}
+            >
               Delete
             </Button>
           </Stack>

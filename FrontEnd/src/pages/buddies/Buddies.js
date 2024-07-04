@@ -9,7 +9,7 @@ import { Pets as PetsIcon } from "@mui/icons-material";
 import EditBuddy from "../../components/EditBuddy";
 
 export default function Buddies() {
-  const { getPetsByUser, addNewPet } = Pets();
+  const { getPetsByUser, addNewPet, deletePet } = Pets();
 
   const { userId } = UserAuth();
   const [buddies, setBuddies] = useState([]);
@@ -26,6 +26,18 @@ export default function Buddies() {
   const handleAddBuddy = async () => {
     const newPet = await addNewPet(userId);
     setBuddies([newPet, ...buddies]);
+  };
+
+  const handleDeletePet = async (buddyProfile) => {
+    try {
+      await deletePet(buddyProfile);
+      const filteredBuddies = buddies.filter(
+        (buddy) => buddy.id !== buddyProfile.id
+      );
+      setBuddies(filteredBuddies);
+    } catch (err) {
+      console.error("Unable to delete pet");
+    }
   };
 
   return (
@@ -49,7 +61,13 @@ export default function Buddies() {
         Add a buddy!
       </Button>
       {buddies &&
-        buddies.map((buddy) => <EditBuddy key={buddy.id} buddy={buddy} />)}
+        buddies.map((buddy) => (
+          <EditBuddy
+            key={buddy.id}
+            buddy={buddy}
+            handleDeletePet={handleDeletePet}
+          />
+        ))}
     </Masterpage>
   );
 }
