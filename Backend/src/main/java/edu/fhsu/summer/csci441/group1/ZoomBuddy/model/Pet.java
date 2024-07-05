@@ -19,6 +19,10 @@ public class Pet {
     private  boolean  isGoodWithChildren;
     private boolean isResourceProtective;
 
+    // constructor
+    public Pet(){
+
+    }
 
     public int getId() {
         return id;

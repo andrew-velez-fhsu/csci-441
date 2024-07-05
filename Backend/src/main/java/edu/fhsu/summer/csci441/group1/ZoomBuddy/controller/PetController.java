@@ -6,6 +6,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+@RestController
+@CrossOrigin
 public class PetController {
     private final PetsRepository petsRepository;
 
@@ -13,6 +15,7 @@ public class PetController {
     public PetController(PetsRepository petsRepository){
         this.petsRepository = petsRepository;
     }
+
 
     // find all pets  ===============================================
     @GetMapping("/pets")
@@ -63,5 +66,4 @@ public class PetController {
 
 
 }
-
 
