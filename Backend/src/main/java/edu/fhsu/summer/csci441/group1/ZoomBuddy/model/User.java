@@ -1,5 +1,7 @@
 package edu.fhsu.summer.csci441.group1.ZoomBuddy.model;
 
+import org.springframework.data.geo.Point;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -19,6 +21,9 @@ public class User {
     private String state;
     private String postalCode;
     private String profileUrl;
+    private Double longitude;
+    private Double latitude;
+    private Point location;
 
     public User() {
 
@@ -119,4 +124,29 @@ public class User {
     public void setProfileUrl(String profileUrl) {
         this.profileUrl = profileUrl;
     }
+
+    public Double getLongitude() {
+        return this.longitude;
+    }
+
+    public void setLongitude(Double longitude) {
+        this.longitude = longitude;
+    }
+
+    public Double getLatitude() {
+        return this.latitude;
+    }
+
+    public void setLatitude(Double latititde) {
+        this.latitude = latititde;
+    }
+
+    public Point getLocation() {
+        return location;
+    }
+
+    public void setLocation(Point location) {
+        this.location = location;
+    }
+
 }

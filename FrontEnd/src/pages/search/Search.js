@@ -40,13 +40,13 @@ export default function Search() {
 
     const searchParam = queryParameters.get("search");
 
-    if (searchParam) {
-      setSearch(searchParam);
-      const searchParams = {
-        search: searchParam,
-      };
-      getPets(searchParams).then((foundPets) => setPets(foundPets));
-    }
+    //if (searchParam) {
+    setSearch(searchParam);
+    const searchParams = {
+      search: searchParam,
+    };
+    getPets(searchParams).then((foundPets) => setPets(foundPets));
+    //}
   }, [location.search, getPets]);
 
   return (

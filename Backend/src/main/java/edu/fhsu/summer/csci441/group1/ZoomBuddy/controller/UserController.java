@@ -3,6 +3,7 @@ package edu.fhsu.summer.csci441.group1.ZoomBuddy.controller;
 import edu.fhsu.summer.csci441.group1.ZoomBuddy.data.UsersRepository;
 import edu.fhsu.summer.csci441.group1.ZoomBuddy.data.PetsRepository;
 import edu.fhsu.summer.csci441.group1.ZoomBuddy.model.User;
+import edu.fhsu.summer.csci441.group1.ZoomBuddy.service.AzureMapsService;
 import edu.fhsu.summer.csci441.group1.ZoomBuddy.model.Pet;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
@@ -15,10 +16,13 @@ public class UserController {
 
     private final UsersRepository usersRepository;
     private final PetsRepository petsRepository;
+    private final AzureMapsService azureMapsService;
 
-    public UserController(UsersRepository usersRepository, PetsRepository petsRepository) {
+    public UserController(UsersRepository usersRepository, PetsRepository petsRepository,
+            AzureMapsService azureMapsService) {
         this.usersRepository = usersRepository;
         this.petsRepository = petsRepository;
+        this.azureMapsService = azureMapsService;
     }
 
     @GetMapping("/users")
@@ -51,12 +55,18 @@ public class UserController {
 
     @PutMapping("/users/{uid}")
     public User updateUser(@PathVariable("uid") String uid, Authentication auth, @RequestBody User user) {
+        // validate request
         if (!user.getUid().equals(auth.getName()))
             throw new ResponseStatusException(
                     HttpStatus.FORBIDDEN, "Current user does not match user body");
-        if (user != null && uid.equals(user.getUid()))
+
+        if (user != null && uid.equals(user.getUid())) {
+            // get the location information
+            var userLocation = azureMapsService.getGeocoding(user);
+            // update the user
+
             return this.usersRepository.save(user);
-        else if (user != null && !uid.equals(user.getUid()))
+        } else if (user != null && !uid.equals(user.getUid()))
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST, "User Id does not match user");
         else
