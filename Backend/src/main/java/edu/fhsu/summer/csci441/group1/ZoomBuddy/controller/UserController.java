@@ -26,8 +26,8 @@ public class UserController {
         return this.usersRepository.findAll();
     }
 
-    @GetMapping("/users/{uid}")
-    public User getUserByUid(@PathVariable("uid") String uid, Authentication auth) {
+    @GetMapping("/users/{id}")
+    public User getUserByUid(@PathVariable("id") String uid, Authentication auth) {
         var user = this.usersRepository.findByFirebaseUid(uid);
         if (user != null) {
             if (!user.getUid().equals(auth.getName()))

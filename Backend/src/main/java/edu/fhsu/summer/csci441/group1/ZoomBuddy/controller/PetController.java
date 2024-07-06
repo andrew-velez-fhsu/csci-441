@@ -17,7 +17,8 @@ public class PetController {
         this.petsRepository = petsRepository;
     }
 
-    // find all pets ===============================================
+    // find all pets  ===============================================
+
     @GetMapping("/pets")
     public Iterable<Pet> findAllPetsByUser(Authentication auth) {
         return this.petsRepository.findAll();
@@ -78,3 +79,6 @@ public class PetController {
     }
 
 }
+
+
+
