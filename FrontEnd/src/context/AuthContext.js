@@ -151,6 +151,7 @@ export const AuthContextProvider = ({ children }) => {
         isLoggedIn,
         userIsLoggedIn,
         userId,
+        bearerToken,
       }}
     >
       {children}

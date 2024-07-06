@@ -49,8 +49,8 @@ CREATE TABLE IF NOT EXISTS public.users(
 -- need to create a pet table here
 CREATE TABLE IF NOT EXISTS public.pets(
     id SERIAL PRIMARY KEY,
-    uid VARCHAR(36) NOT NULL UNIQUE,
-    name VARCHAR(50) NOT NULL,
+    uid VARCHAR(36),
+    name VARCHAR(50),
     description TEXT,
     breed VARCHAR (80),
     birthday DATE,
