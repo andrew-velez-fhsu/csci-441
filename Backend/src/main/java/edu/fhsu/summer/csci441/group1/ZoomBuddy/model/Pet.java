@@ -5,20 +5,18 @@ import jakarta.persistence.*;
 import java.sql.Date;
 
 @Entity
-@Table(name="pets")
+@Table(name = "pets")
 public class Pet {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-
     private int id;
     private String name;
     private String breed;
     private String description;
     private String uid;
-    private Date birthdate;
-    private  boolean  isGoodWithChildren;
+    private Date birthday;
+    private boolean isGoodWithChildren;
     private boolean isResourceProtective;
-
 
     public int getId() {
         return id;
@@ -60,12 +58,12 @@ public class Pet {
         this.uid = uid;
     }
 
-    public Date getBirthdate() {
-        return birthdate;
+    public Date getbirthday() {
+        return birthday;
     }
 
-    public void setBirthdate(Date birthdate) {
-        this.birthdate = birthdate;
+    public void setbirthday(Date birthday) {
+        this.birthday = birthday;
     }
 
     public boolean isGoodWithChildren() {

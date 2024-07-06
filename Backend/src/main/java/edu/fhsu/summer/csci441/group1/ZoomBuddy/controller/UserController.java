@@ -1,7 +1,9 @@
 package edu.fhsu.summer.csci441.group1.ZoomBuddy.controller;
 
 import edu.fhsu.summer.csci441.group1.ZoomBuddy.data.UsersRepository;
+import edu.fhsu.summer.csci441.group1.ZoomBuddy.data.PetsRepository;
 import edu.fhsu.summer.csci441.group1.ZoomBuddy.model.User;
+import edu.fhsu.summer.csci441.group1.ZoomBuddy.model.Pet;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -12,9 +14,11 @@ import org.springframework.web.server.ResponseStatusException;
 public class UserController {
 
     private final UsersRepository usersRepository;
+    private final PetsRepository petsRepository;
 
-    public UserController(UsersRepository usersRepository) {
+    public UserController(UsersRepository usersRepository, PetsRepository petsRepository) {
         this.usersRepository = usersRepository;
+        this.petsRepository = petsRepository;
     }
 
     @GetMapping("/users")
@@ -25,15 +29,31 @@ public class UserController {
     @GetMapping("/users/{uid}")
     public User getUserByUid(@PathVariable("uid") String uid, Authentication auth) {
         var user = this.usersRepository.findByFirebaseUid(uid);
-        if (user != null)
+        if (user != null) {
+            if (!user.getUid().equals(auth.getName()))
+                throw new ResponseStatusException(
+                        HttpStatus.FORBIDDEN, "Pet does not belong to current user");
             return user;
-        else
+        } else
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "User not found");
+    }
+
+    @GetMapping("/users/{uid}/pets")
+    public Iterable<Pet> getPetsByUser(@PathVariable("uid") String uid, Authentication auth) {
+        var user = this.usersRepository.findByFirebaseUid(uid);
+        if (user != null) {
+            return this.petsRepository.findAllPetsByUser(uid);
+        } else
             throw new ResponseStatusException(
                     HttpStatus.NOT_FOUND, "User not found");
     }
 
     @PutMapping("/users/{uid}")
     public User updateUser(@PathVariable("uid") String uid, Authentication auth, @RequestBody User user) {
+        if (!user.getUid().equals(auth.getName()))
+            throw new ResponseStatusException(
+                    HttpStatus.FORBIDDEN, "Current user does not match user body");
         if (user != null && uid.equals(user.getUid()))
             return this.usersRepository.save(user);
         else if (user != null && !uid.equals(user.getUid()))
@@ -45,7 +65,10 @@ public class UserController {
     }
 
     @PostMapping("/users")
-    public User addUser(@RequestBody User user) {
+    public User addUser(@RequestBody User user, Authentication auth) {
+        if (!user.getUid().equals(auth.getName()))
+            throw new ResponseStatusException(
+                    HttpStatus.FORBIDDEN, "Current user does not match user body");
         return this.usersRepository.save(user);
     }
 
