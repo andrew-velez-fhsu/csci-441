@@ -1,6 +1,6 @@
 package edu.fhsu.summer.csci441.group1.ZoomBuddy.model;
 
-import org.springframework.data.geo.Point;
+import org.locationtech.jts.geom.Point;
 
 import jakarta.persistence.*;
 
@@ -9,7 +9,7 @@ import jakarta.persistence.*;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
     private String displayName;
     private String firstName;
     private String lastName;
@@ -37,11 +37,11 @@ public class User {
         return displayName;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

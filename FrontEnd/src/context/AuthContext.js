@@ -54,30 +54,18 @@ export const AuthContextProvider = ({ children }) => {
       uid: token.user.uid,
       email: email,
     };
-    let user = await fetch(`${process.env.REACT_APP_API}/users`, {
+    await fetch(`${process.env.REACT_APP_API}/users`, {
       method: "POST",
       headers: {
         "Content-type": "application/json",
-        Authorization: `Bearer ${bearerToken}`,
+        Authorization: `Bearer ${token.user.accessToken}`,
       },
       body: JSON.stringify(userRecord),
     });
-    //setIsLoggedIn(true);
-    setUserId(user["id"]);
+    setIsLoggedIn(true);
+    setUserId(token.user.uid);
     return token.user;
   };
-
-  // const getUserId = () => {
-  //   const user = auth.currentUser;
-  //   if (user) {
-  //     setIsLoggedIn(true);
-  //     setUserId(user.uid)
-  //     return user.uid;
-  //   } else {
-  //     setIsLoggedIn(false);
-  //     return false;
-  //   }
-  // };
 
   const userIsLoggedIn = () => {
     const user = auth.currentUser;
@@ -135,7 +123,7 @@ export const AuthContextProvider = ({ children }) => {
   };
 
   const logout = () => {
-    //setIsLoggedIn(false);
+    setIsLoggedIn(false);
     return signOut(auth);
   };
 

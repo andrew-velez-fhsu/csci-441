@@ -7,6 +7,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import edu.fhsu.summer.csci441.group1.ZoomBuddy.entities.GeocodeResponse;
 import edu.fhsu.summer.csci441.group1.ZoomBuddy.model.User;
 
 @Service

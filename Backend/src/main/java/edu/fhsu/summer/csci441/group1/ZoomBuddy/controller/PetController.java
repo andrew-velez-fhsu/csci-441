@@ -17,13 +17,6 @@ public class PetController {
         this.petsRepository = petsRepository;
     }
 
-    // find all pets  ===============================================
-
-    @GetMapping("/pets")
-    public Iterable<Pet> findAllPetsByUser(Authentication auth) {
-        return this.petsRepository.findAll();
-    }
-
     // get pet by id ========================================================
     @GetMapping("/pets/{id}")
     public Pet getPetByid(@PathVariable("id") int id, Authentication auth) {
@@ -43,22 +36,38 @@ public class PetController {
     // =====================================================================
     @PutMapping("/pets/{id}")
     public Pet updatedPet(@PathVariable("id") int id, Authentication auth, @RequestBody Pet pet) {
+        // get the existing pet object
+        var existingPet = this.petsRepository.findById(id).orElse(null);
+
+        if (existingPet == null || pet == null)
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "Pet not found");
+
+        if (existingPet.getId() != pet.getId() || pet.getId() != id)
+            throw new ResponseStatusException(
+                    HttpStatus.FORBIDDEN, "Pet ID does not match updated pet");
+
+        if (!existingPet.getUid().equals(pet.getUid()))
+            throw new ResponseStatusException(
+                    HttpStatus.FORBIDDEN, "Cannot change pet owner");
+
         if (!pet.getUid().equals(auth.getName()))
             throw new ResponseStatusException(
                     HttpStatus.FORBIDDEN, "Pet does not belong to current user");
 
-        if (pet != null && id == pet.getId())
-            return this.petsRepository.save(pet);
-        else
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "Pet not found");
+        // checks pass, save the pet
+        return this.petsRepository.save(pet);
+
     }
 
     // add pet
     // ==========================================================================
     @PostMapping("/pets")
-    public Pet addPet(@RequestBody Pet pet) {
-        return this.petsRepository.save(pet);
+    public Pet addPet(@RequestBody Pet pet, Authentication auth) {
+        if (pet.getUid().equals(auth.getName()))
+            return this.petsRepository.save(pet);
+        else
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Cannot add pet to another user");
     }
 
     // Delete
@@ -79,6 +88,3 @@ public class PetController {
     }
 
 }
-
-
-
