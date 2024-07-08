@@ -3,7 +3,12 @@ package edu.fhsu.summer.csci441.group1.ZoomBuddy.controller;
 import edu.fhsu.summer.csci441.group1.ZoomBuddy.data.UsersRepository;
 import edu.fhsu.summer.csci441.group1.ZoomBuddy.data.PetsRepository;
 import edu.fhsu.summer.csci441.group1.ZoomBuddy.model.User;
+import edu.fhsu.summer.csci441.group1.ZoomBuddy.service.AzureMapsService;
 import edu.fhsu.summer.csci441.group1.ZoomBuddy.model.Pet;
+
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.GeometryFactory;
+import org.locationtech.jts.geom.Point;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -15,10 +20,15 @@ public class UserController {
 
     private final UsersRepository usersRepository;
     private final PetsRepository petsRepository;
+    private final AzureMapsService azureMapsService;
+    private final GeometryFactory geometryFactory;
 
-    public UserController(UsersRepository usersRepository, PetsRepository petsRepository) {
+    public UserController(UsersRepository usersRepository, PetsRepository petsRepository,
+            AzureMapsService azureMapsService) {
         this.usersRepository = usersRepository;
         this.petsRepository = petsRepository;
+        this.azureMapsService = azureMapsService;
+        this.geometryFactory = new GeometryFactory();
     }
 
     @GetMapping("/users")
@@ -32,7 +42,7 @@ public class UserController {
         if (user != null) {
             if (!user.getUid().equals(auth.getName()))
                 throw new ResponseStatusException(
-                        HttpStatus.FORBIDDEN, "Pet does not belong to current user");
+                        HttpStatus.FORBIDDEN, "Current User does not match requested user");
             return user;
         } else
             throw new ResponseStatusException(
@@ -51,12 +61,30 @@ public class UserController {
 
     @PutMapping("/users/{uid}")
     public User updateUser(@PathVariable("uid") String uid, Authentication auth, @RequestBody User user) {
+        // validate request
         if (!user.getUid().equals(auth.getName()))
             throw new ResponseStatusException(
                     HttpStatus.FORBIDDEN, "Current user does not match user body");
-        if (user != null && uid.equals(user.getUid()))
+
+        if (user != null && uid.equals(user.getUid())) {
+            // get the location information
+            var userLocation = azureMapsService.getGeocoding(user);
+            // update the user
+            if (userLocation != null && userLocation.getFeatures().size() > 0) {
+                // use the first feature
+                var feature = userLocation.getFeatures().get(0);
+                var longitude = feature.getGeometry().getCoordinates().get(0).doubleValue();
+                var latitude = feature.getGeometry().getCoordinates().get(1).doubleValue();
+                var location = geometryFactory.createPoint(new Coordinate(longitude, latitude));
+                // TODO: location is causing JSON Serialization errors
+                user.setLongitude(longitude);
+                user.setLatitude(latitude);
+
+                // user.setLocation(location);
+            }
+
             return this.usersRepository.save(user);
-        else if (user != null && !uid.equals(user.getUid()))
+        } else if (user != null && !uid.equals(user.getUid()))
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST, "User Id does not match user");
         else

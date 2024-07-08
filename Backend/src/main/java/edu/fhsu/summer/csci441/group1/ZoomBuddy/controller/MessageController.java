@@ -1,6 +1,5 @@
 package edu.fhsu.summer.csci441.group1.ZoomBuddy.controller;
 
-
 import edu.fhsu.summer.csci441.group1.ZoomBuddy.data.MessagesRepository;
 import edu.fhsu.summer.csci441.group1.ZoomBuddy.data.UsersRepository;
 import edu.fhsu.summer.csci441.group1.ZoomBuddy.model.Message;
@@ -15,14 +14,15 @@ import org.springframework.web.server.ResponseStatusException;
 public class MessageController {
 
     private final MessagesRepository messagesRepository;
-    private  final UsersRepository usersRepository;
-    //constructor here
+    private final UsersRepository usersRepository;
+
+    // constructor here
     public MessageController(MessagesRepository messagesRepository, UsersRepository usersRepository) {
         this.messagesRepository = messagesRepository;
         this.usersRepository = usersRepository;
     }
 
-    // find all messages  ===============================================
+    // find all messages ===============================================
     @GetMapping("/message")
     public Iterable<Message> findAllMessagesByUser() {
         return this.messagesRepository.findAll();
@@ -30,33 +30,31 @@ public class MessageController {
 
     // Send email
     @PostMapping("/messages")
-    public void sendEmail(@RequestBody Message message){
+    public void sendEmail(@RequestBody Message message) {
         messagesRepository.save(message);
     }
 
-    //get message by id ========================================================
+    // get message by id ========================================================
     @GetMapping("/messages/thread/{id}")
     public Iterable<Message> getMessagesByThread(@PathVariable("id") int id, Authentication auth) {
         var message = this.messagesRepository.getMessagesByThreadId(id);
         if (message != null) {
             return message;
-        }
-        else
+        } else
             throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "Message not found"
-            );
+                    HttpStatus.NOT_FOUND, "Message not found");
     }
 
     // Delete
     @DeleteMapping("/messages/{id}")
-    public void  deleteMessage(@PathVariable("id") int id){
+    public void deleteMessage(@PathVariable("id") int id) {
         System.out.println("Deleted successfully");
         messagesRepository.deleteById(id);
     }
 
     // Count unread messages
     @GetMapping("/messages/unread")
-    public int getCountUnreadMessages(Authentication auth){
+    public int getCountUnreadMessages(Authentication auth) {
         var user = usersRepository.findByFirebaseUid(auth.getName());
         var messages = messagesRepository.getAllUnreadMessages(user.getId());
         var count = 0;

@@ -57,11 +57,10 @@ export const PetsContextProvider = ({ children }) => {
   };
 
   const getPets = async (props) => {
-    let pets = await fetch(`${process.env.REACT_APP_API}/pets`, {
+    let pets = await fetch(`${process.env.REACT_APP_API}/search`, {
       method: "GET",
       headers: {
         "Content-type": "application/json",
-        Authorization: `Bearer ${bearerToken}`,
       },
     }).then((data) => data.json());
 
