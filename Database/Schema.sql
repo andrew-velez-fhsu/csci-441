@@ -58,13 +58,36 @@ CREATE TABLE IF NOT EXISTS public.pets(
     isResourceProtective boolean
 );
 
+CREATE TABLE IF NOT EXISTS public.messages (
+    id SERIAL PRIMARY KEY,
+    threadId INTEGER NOT NULL,
+    senderUid INTEGER NOT NULL,
+    recipientUid INTEGER NOT NULL,
+    body VARCHAR ,
+    status VARCHAR(255),
+    date DATE,
+    CONSTRAINT FK_Sender    FOREIGN KEY (senderUid) REFERENCES users(uid),
+    CONSTRAINT FK_Recipient    FOREIGN KEY (recipientUid) REFERENCES users(id)
+)
+
+-- DROP TABLE public.message
+
+CREATE TABLE IF NOT EXISTS public.photos(
+    id SERIAL PRIMARY KEY,
+    petId INTEGER NOT null,
+    url VARCHAR,
+    CONSTRAINT FK_Pet    FOREIGN KEY (petId) REFERENCES pets(id)
+)
+
+
 -- DROP TABLE public.pets
 
 -- This will allow the user to do all actions on all tables
 GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public to web;
 GRANT USAGE ON SEQUENCE users_id_seq TO web;
 GRANT USAGE ON SEQUENCE pets_id_seq TO web;
-
+GRANT USAGE ON SEQUENCE messages_id_seq TO web;
+GRANT USAGE ON SEQUENCE photos_id_seq TO web;
 
 -- ADD Location awareness to USERS
 CREATE EXTENSION IF NOT EXISTS postgis;
