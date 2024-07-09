@@ -53,12 +53,13 @@ public class MessageController {
     }
 
     // Count unread messages
+    @SuppressWarnings("unused")
     @GetMapping("/messages/unread")
     public int getCountUnreadMessages(Authentication auth) {
         var user = usersRepository.findByFirebaseUid(auth.getName());
         var messages = messagesRepository.getAllUnreadMessages(user.getId());
         var count = 0;
-        for (Message message:messages){
+        for (Message message : messages) {
             count++;
         }
         return count;
