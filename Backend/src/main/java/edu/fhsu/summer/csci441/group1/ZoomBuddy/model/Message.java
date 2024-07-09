@@ -5,21 +5,21 @@ import jakarta.persistence.*;
 import java.sql.Date;
 
 @Entity
-@Table(name="messages")
+@Table(name = "messages")
 public class Message {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 
     private int id;
     private int threadId;
-    private int senderUid;
-    private int recipientUid;
+    private String senderUid;
+    private String recipientUid;
     private String body;
     private String status;
     private Date date;
 
     // constructor here
-    public Message(){
+    public Message() {
 
     }
 
@@ -39,19 +39,19 @@ public class Message {
         this.threadId = threadId;
     }
 
-    public int getSenderUid() {
+    public String getSenderUid() {
         return senderUid;
     }
 
-    public void setSenderUid(int senderUid) {
+    public void setSenderUid(String senderUid) {
         this.senderUid = senderUid;
     }
 
-    public int getRecipientUid() {
+    public String getRecipientUid() {
         return recipientUid;
     }
 
-    public void setRecipientUid(int recipientUid) {
+    public void setRecipientUid(String recipientUid) {
         this.recipientUid = recipientUid;
     }
 
