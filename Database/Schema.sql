@@ -45,6 +45,7 @@ CREATE TABLE IF NOT EXISTS public.users(
     postalcode varchar(20),
     profileurl varchar
 );
+-- DROP TABLE public.users CASCADE
 
 -- need to create a pet table here
 CREATE TABLE IF NOT EXISTS public.pets(
@@ -57,20 +58,21 @@ CREATE TABLE IF NOT EXISTS public.pets(
     isGoodWithChildren boolean,
     isResourceProtective boolean
 );
+-- DROP TABLE public.pets CASCADE
 
 CREATE TABLE IF NOT EXISTS public.messages (
     id SERIAL PRIMARY KEY,
     threadId INTEGER NOT NULL,
-    senderUid INTEGER NOT NULL,
-    recipientUid INTEGER NOT NULL,
+    senderUid VARCHAR(36) NOT NULL,
+    recipientUid VARCHAR(36) NOT NULL,
     body VARCHAR ,
     status VARCHAR(255),
     date DATE,
     CONSTRAINT FK_Sender    FOREIGN KEY (senderUid) REFERENCES users(uid),
-    CONSTRAINT FK_Recipient    FOREIGN KEY (recipientUid) REFERENCES users(id)
+    CONSTRAINT FK_Recipient    FOREIGN KEY (recipientUid) REFERENCES users(uid)
 )
 
--- DROP TABLE public.message
+-- DROP TABLE public.messages CASCADE
 
 CREATE TABLE IF NOT EXISTS public.photos(
     id SERIAL PRIMARY KEY,
@@ -79,8 +81,7 @@ CREATE TABLE IF NOT EXISTS public.photos(
     CONSTRAINT FK_Pet    FOREIGN KEY (petId) REFERENCES pets(id)
 )
 
-
--- DROP TABLE public.pets
+-- DROP TABLE public.PHOTOS CASCADE
 
 -- This will allow the user to do all actions on all tables
 GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public to web;
@@ -89,11 +90,19 @@ GRANT USAGE ON SEQUENCE pets_id_seq TO web;
 GRANT USAGE ON SEQUENCE messages_id_seq TO web;
 GRANT USAGE ON SEQUENCE photos_id_seq TO web;
 
+
 -- ADD Location awareness to USERS
+BEGIN TRANSACTION;
 CREATE EXTENSION IF NOT EXISTS postgis;
-
-
 ALTER TABLE public.users
 ADD COLUMN longitude DOUBLE PRECISION,
 ADD COLUMN latitude DOUBLE PRECISION,
 ADD COLUMN location GEOGRAPHY(POINT);
+COMMIT
+
+-- Add foreign key reference to pets
+BEGIN TRANSACTION;
+ALTER TABLE public.pets
+ADD CONSTRAINT FK_Pets_Users FOREIGN KEY (uid) REFERENCES users(uid);
+COMMIT
+

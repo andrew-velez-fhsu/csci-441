@@ -8,7 +8,6 @@ import edu.fhsu.summer.csci441.group1.ZoomBuddy.model.Pet;
 
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.GeometryFactory;
-import org.locationtech.jts.geom.Point;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -76,11 +75,10 @@ public class UserController {
                 var longitude = feature.getGeometry().getCoordinates().get(0).doubleValue();
                 var latitude = feature.getGeometry().getCoordinates().get(1).doubleValue();
                 var location = geometryFactory.createPoint(new Coordinate(longitude, latitude));
-                // TODO: location is causing JSON Serialization errors
+
                 user.setLongitude(longitude);
                 user.setLatitude(latitude);
-
-                // user.setLocation(location);
+                user.setLocation(location);
             }
 
             return this.usersRepository.save(user);
