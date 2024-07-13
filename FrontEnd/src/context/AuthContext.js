@@ -114,6 +114,31 @@ export const AuthContextProvider = ({ children }) => {
     }
   };
 
+  const deleteProfile = async () => {
+    const token = getAuth();
+
+    if (token?.currentUser?.uid) {
+      try {
+        const userId = token.currentUser.uid;
+        const getUserUri = `${process.env.REACT_APP_API}/users/${userId}`;
+        const response = await fetch(getUserUri, {
+          method: "DELETE",
+          headers: {
+            "Content-type": "application/json",
+            Authorization: `Bearer ${bearerToken}`,
+          },
+        });
+        if (!response.ok)
+          console.error("Unable to delete user.", response.statusText);
+        logout();
+      } catch (eX) {
+        console.error(eX);
+      }
+    } else {
+      return false;
+    }
+  };
+
   const signIn = async (email, password) => {
     await setPersistence(auth, browserSessionPersistence);
     let token = await signInWithEmailAndPassword(auth, email, password);
@@ -140,6 +165,7 @@ export const AuthContextProvider = ({ children }) => {
         userIsLoggedIn,
         userId,
         bearerToken,
+        deleteProfile,
       }}
     >
       {children}

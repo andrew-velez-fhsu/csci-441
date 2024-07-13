@@ -15,10 +15,11 @@ public class FirebaseConfig {
 
     @Value("${google.firebase.config.file}")
     private String firebaseConfigFile;
+
     @Bean
     public FirebaseApp initializeFirebase() throws IOException {
-        FileInputStream serviceAccount = new FileInputStream("C:/Users/Ronald/firebase-admin.json" );
-        FirebaseOptions options= new FirebaseOptions.Builder()
+        FileInputStream serviceAccount = new FileInputStream(firebaseConfigFile);
+        FirebaseOptions options = new FirebaseOptions.Builder()
                 .setCredentials(GoogleCredentials.fromStream(serviceAccount))
                 .build();
         return FirebaseApp.initializeApp(options);
