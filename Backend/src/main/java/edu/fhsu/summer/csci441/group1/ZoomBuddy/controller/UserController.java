@@ -6,6 +6,7 @@ import edu.fhsu.summer.csci441.group1.ZoomBuddy.model.User;
 import edu.fhsu.summer.csci441.group1.ZoomBuddy.service.AzureMapsService;
 import edu.fhsu.summer.csci441.group1.ZoomBuddy.model.Pet;
 
+import edu.fhsu.summer.csci441.group1.ZoomBuddy.service.FirebaseUserService;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.GeometryFactory;
 import org.springframework.http.HttpStatus;
@@ -21,12 +22,14 @@ public class UserController {
     private final PetsRepository petsRepository;
     private final AzureMapsService azureMapsService;
     private final GeometryFactory geometryFactory;
+    private final FirebaseUserService firebaseUserService;
 
     public UserController(UsersRepository usersRepository, PetsRepository petsRepository,
-            AzureMapsService azureMapsService) {
+                          AzureMapsService azureMapsService, FirebaseUserService firebaseUserService) {
         this.usersRepository = usersRepository;
         this.petsRepository = petsRepository;
         this.azureMapsService = azureMapsService;
+        this.firebaseUserService = firebaseUserService;
         this.geometryFactory = new GeometryFactory();
     }
 
@@ -100,6 +103,15 @@ public class UserController {
 
     @DeleteMapping("/users/{uid}")
     public void deleteUser(@PathVariable("uid") String uid, Authentication auth) {
-        throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Not implemented");
+        User user = usersRepository.findByFirebaseUid(uid);
+        if (user == null){
+            throw new ResponseStatusException(
+              HttpStatus.NOT_FOUND, "User not found");
+        }
+        if (!user.getUid().equals(auth.getName()))
+            throw new ResponseStatusException(
+                    HttpStatus.FORBIDDEN, "Current user does not match user body");
+        firebaseUserService.deleteUser(uid); // call firebase delete method
+        usersRepository.deleteById(user.getId());
     }
 }
