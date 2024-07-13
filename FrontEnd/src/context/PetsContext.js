@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { UserAuth } from "./AuthContext";
 
 const PetsContext = createContext();
@@ -6,6 +6,43 @@ const PetsContext = createContext();
 export const PetsContextProvider = ({ children }) => {
   const [pets, setPets] = useState([]);
   const { bearerToken } = UserAuth();
+  const [location, setLocation] = useState({ lat: null, lon: null });
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          setLocation({
+            lat: position.coords.latitude,
+            lon: position.coords.longitude,
+          });
+          setError(null);
+        },
+        (error) => {
+          switch (error.code) {
+            case error.PERMISSION_DENIED:
+              setError("User denied the request for Geolocation.");
+              break;
+            case error.POSITION_UNAVAILABLE:
+              setError("Location information is unavailable.");
+              break;
+            case error.TIMEOUT:
+              setError("The request to get user location timed out.");
+              break;
+            case error.UNKNOWN_ERROR:
+              setError("An unknown error occurred.");
+              break;
+            default:
+              setError("An unknown error occurred.");
+              break;
+          }
+        }
+      );
+    } else {
+      setError("Geolocation is not supported by this browser.");
+    }
+  }, []);
 
   const getPetsByUser = async (uid) => {
     const myPets = await fetch(
@@ -24,15 +61,16 @@ export const PetsContextProvider = ({ children }) => {
 
   const addNewPet = async (uid) => {
     const pet = { uid };
-    await fetch(`${process.env.REACT_APP_API}/pets`, {
+    const newPet = await fetch(`${process.env.REACT_APP_API}/pets`, {
       method: "POST",
       headers: {
         "Content-type": "application/json",
         Authorization: `Bearer ${bearerToken}`,
       },
       body: JSON.stringify(pet),
-    });
-    return pet;
+    }).then((data) => data.json());
+
+    return newPet;
   };
 
   const updatePet = async (petProfile) => {
@@ -56,13 +94,24 @@ export const PetsContextProvider = ({ children }) => {
     });
   };
 
-  const getPets = async (props) => {
-    let pets = await fetch(`${process.env.REACT_APP_API}/search`, {
-      method: "GET",
-      headers: {
-        "Content-type": "application/json",
-      },
-    }).then((data) => data.json());
+  const searchPets = async (props) => {
+    let params = new URLSearchParams();
+    if (location.lat && location.lon) {
+      params.append("lat", location.lat);
+      params.append("lon", location.lon);
+    }
+
+    const queryParams = params.toString();
+
+    let pets = await fetch(
+      `${process.env.REACT_APP_API}/search?${queryParams}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-type": "application/json",
+        },
+      }
+    ).then((data) => data.json());
 
     if (props.search) {
       pets = pets.filter(
@@ -105,7 +154,7 @@ export const PetsContextProvider = ({ children }) => {
         getPetsByUser,
         addNewPet,
         updatePet,
-        getPets,
+        searchPets,
         getPet,
         deletePet,
       }}

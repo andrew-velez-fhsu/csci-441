@@ -1,5 +1,12 @@
-{"properties": [{
-  "name": "azure.maps.api.key",
-  "type": "java.lang.String",
-  "description": "The primary key for the Azure Maps service, used for geocoding"
-}]}
+{"properties": [
+  {
+    "name": "azure.maps.api.key",
+    "type": "java.lang.String",
+    "description": "The primary key for the Azure Maps service, used for geocoding"
+  },
+  {
+    "name": "apilayer.api.key",
+    "type": "java.lang.String",
+    "description": "The api key used by apilayer.com, which is used to get geocoding information based on IP"
+  }
+]}

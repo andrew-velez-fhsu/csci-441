@@ -71,3 +71,7 @@ body{
 .headerLink{
   text-decoration: none;
 }
+
+textarea {
+  overflow-y: scroll !important;
+}

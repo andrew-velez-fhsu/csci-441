@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 
 import java.sql.Date;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 @Entity
 @Table(name = "pets")
 public class Pet {
@@ -15,11 +17,13 @@ public class Pet {
     private String description;
     private String uid;
     private Date birthday;
+    @JsonProperty("isGoodWithChildren")
     private boolean isGoodWithChildren;
+    @JsonProperty("isResourceProtective")
     private boolean isResourceProtective;
 
     // constructor
-    public Pet(){
+    public Pet() {
     }
 
     public int getId() {

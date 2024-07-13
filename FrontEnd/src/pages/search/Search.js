@@ -20,7 +20,7 @@ import { UserAuth } from "../../context/AuthContext";
 export default function Search() {
   const [search, setSearch] = useState("");
   const [pets, setPets] = useState([]);
-  const { getPets } = Pets();
+  const { searchPets } = Pets();
   const location = useLocation();
   const { isLoggedIn } = UserAuth();
 
@@ -30,7 +30,7 @@ export default function Search() {
       search: search,
     };
 
-    const foundPets = await getPets(searchParams);
+    const foundPets = await searchPets(searchParams);
 
     setPets(foundPets);
   };
@@ -45,9 +45,9 @@ export default function Search() {
     const searchParams = {
       search: searchParam,
     };
-    getPets(searchParams).then((foundPets) => setPets(foundPets));
+    searchPets(searchParams).then((foundPets) => setPets(foundPets));
     //}
-  }, [location.search, getPets]);
+  }, [location.search, searchPets]);
 
   return (
     <Masterpage title="Search">
