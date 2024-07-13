@@ -1,5 +1,7 @@
 package edu.fhsu.summer.csci441.group1.ZoomBuddy.model;
 
+import java.util.List;
+
 import org.locationtech.jts.geom.Point;
 
 import jakarta.persistence.*;
@@ -8,12 +10,10 @@ import jakarta.persistence.*;
 @Table(name = "users")
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private String uid;
     private String displayName;
     private String firstName;
     private String lastName;
-    private String uid;
     private String email;
     private String address1;
     private String address2;
@@ -25,6 +25,17 @@ public class User {
     private Double latitude;
     private Point location;
 
+    // @OneToMany(mappedBy = "owner", fetch = FetchType.LAZY)
+    // private List<Pet> pets;
+
+    // public List<Pet> getPets() {
+    // return pets;
+    // }
+
+    // public void setPets(List<Pet> pets) {
+    // this.pets = pets;
+    // }
+
     public User() {
 
     }
@@ -35,14 +46,6 @@ public class User {
 
     public String getDisplayName() {
         return displayName;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
     }
 
     public String getFirstName() {

@@ -15,12 +15,24 @@ public class Pet {
     private String name;
     private String breed;
     private String description;
-    private String uid;
+    // private String uid;
     private Date birthday;
     @JsonProperty("isGoodWithChildren")
     private boolean isGoodWithChildren;
     @JsonProperty("isResourceProtective")
     private boolean isResourceProtective;
+
+    @ManyToOne
+    @JoinColumn(name = "uid")
+    private User owner;
+
+    public User getOwner() {
+        return owner;
+    }
+
+    public void setOwner(User owner) {
+        this.owner = owner;
+    }
 
     // constructor
     public Pet() {
@@ -58,13 +70,13 @@ public class Pet {
         this.description = description;
     }
 
-    public String getUid() {
-        return uid;
-    }
+    // public String getUid() {
+    // return uid;
+    // }
 
-    public void setUid(String uid) {
-        this.uid = uid;
-    }
+    // public void setUid(String uid) {
+    // this.uid = uid;
+    // }
 
     public Date getbirthday() {
         return birthday;

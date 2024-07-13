@@ -8,5 +8,15 @@
     "name": "apilayer.api.key",
     "type": "java.lang.String",
     "description": "The api key used by apilayer.com, which is used to get geocoding information based on IP"
+  },
+  {
+    "name": "google.firebase.config.file",
+    "type": "java.lang.String",
+    "description": "The file path to the 'google.firebase.config.file', used to load the firebase configuration"
+  },
+  {
+    "name": "google.firebase.config.appName",
+    "type": "java.lang.String",
+    "description": "The app name used to describe the app for Firebase, used as a unique key to load config"
   }
 ]}

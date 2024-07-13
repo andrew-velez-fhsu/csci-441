@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 
 @Configuration
@@ -16,12 +15,17 @@ public class FirebaseConfig {
     @Value("${google.firebase.config.file}")
     private String firebaseConfigFile;
 
+    @Value("${google.firebase.config.appName}")
+    private String firebaseAppName;
+
     @Bean
     public FirebaseApp initializeFirebase() throws IOException {
-        FileInputStream serviceAccount = new FileInputStream(firebaseConfigFile);
-        FirebaseOptions options = new FirebaseOptions.Builder()
-                .setCredentials(GoogleCredentials.fromStream(serviceAccount))
+        FirebaseOptions options = FirebaseOptions.builder()
+                .setCredentials(GoogleCredentials.getApplicationDefault())
                 .build();
-        return FirebaseApp.initializeApp(options);
+        if (FirebaseApp.getApps().isEmpty())
+            return FirebaseApp.initializeApp(options);
+        else
+            return FirebaseApp.getInstance();
     }
 }

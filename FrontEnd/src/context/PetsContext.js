@@ -4,7 +4,6 @@ import { UserAuth } from "./AuthContext";
 const PetsContext = createContext();
 
 export const PetsContextProvider = ({ children }) => {
-  const [pets, setPets] = useState([]);
   const { bearerToken } = UserAuth();
   const [location, setLocation] = useState({ lat: null, lon: null });
   const [error, setError] = useState(null);
@@ -55,7 +54,6 @@ export const PetsContextProvider = ({ children }) => {
         },
       }
     ).then((data) => data.json());
-    setPets(myPets);
     return myPets;
   };
 
@@ -150,7 +148,6 @@ export const PetsContextProvider = ({ children }) => {
   return (
     <PetsContext.Provider
       value={{
-        pets,
         getPetsByUser,
         addNewPet,
         updatePet,

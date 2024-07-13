@@ -25,7 +25,7 @@ public class UserController {
     private final FirebaseUserService firebaseUserService;
 
     public UserController(UsersRepository usersRepository, PetsRepository petsRepository,
-                          AzureMapsService azureMapsService, FirebaseUserService firebaseUserService) {
+            AzureMapsService azureMapsService, FirebaseUserService firebaseUserService) {
         this.usersRepository = usersRepository;
         this.petsRepository = petsRepository;
         this.azureMapsService = azureMapsService;
@@ -40,7 +40,7 @@ public class UserController {
 
     @GetMapping("/users/{id}")
     public User getUserByUid(@PathVariable("id") String uid, Authentication auth) {
-        var user = this.usersRepository.findByFirebaseUid(uid);
+        var user = this.usersRepository.findById(uid).orElseThrow();
         if (user != null) {
             if (!user.getUid().equals(auth.getName()))
                 throw new ResponseStatusException(
@@ -53,7 +53,7 @@ public class UserController {
 
     @GetMapping("/users/{uid}/pets")
     public Iterable<Pet> getPetsByUser(@PathVariable("uid") String uid, Authentication auth) {
-        var user = this.usersRepository.findByFirebaseUid(uid);
+        var user = this.usersRepository.findById(uid).orElseThrow();
         if (user != null) {
             return this.petsRepository.findAllPetsByUser(uid);
         } else
@@ -62,7 +62,8 @@ public class UserController {
     }
 
     @PutMapping("/users/{uid}")
-    public User updateUser(@PathVariable("uid") String uid, Authentication auth, @RequestBody User user) {
+    public User updateUser(@PathVariable("uid") String uid, Authentication auth, @RequestBody User user)
+            throws Exception {
         // validate request
         if (!user.getUid().equals(auth.getName()))
             throw new ResponseStatusException(
@@ -70,18 +71,22 @@ public class UserController {
 
         if (user != null && uid.equals(user.getUid())) {
             // get the location information
-            var userLocation = azureMapsService.getGeocoding(user);
-            // update the user
-            if (userLocation != null && userLocation.getFeatures().size() > 0) {
-                // use the first feature
-                var feature = userLocation.getFeatures().get(0);
-                var longitude = feature.getGeometry().getCoordinates().get(0).doubleValue();
-                var latitude = feature.getGeometry().getCoordinates().get(1).doubleValue();
-                var location = geometryFactory.createPoint(new Coordinate(longitude, latitude));
+            try {
+                var userLocation = azureMapsService.getGeocoding(user);
+                // update the user
+                if (userLocation != null && userLocation.getFeatures().size() > 0) {
+                    // use the first feature
+                    var feature = userLocation.getFeatures().get(0);
+                    var longitude = feature.getGeometry().getCoordinates().get(0).doubleValue();
+                    var latitude = feature.getGeometry().getCoordinates().get(1).doubleValue();
+                    var location = geometryFactory.createPoint(new Coordinate(longitude, latitude));
 
-                user.setLongitude(longitude);
-                user.setLatitude(latitude);
-                user.setLocation(location);
+                    user.setLongitude(longitude);
+                    user.setLatitude(latitude);
+                    user.setLocation(location);
+                }
+            } catch (Exception ex) {
+                throw new Exception("Unable to get user location from API Map service");
             }
 
             return this.usersRepository.save(user);
@@ -103,15 +108,15 @@ public class UserController {
 
     @DeleteMapping("/users/{uid}")
     public void deleteUser(@PathVariable("uid") String uid, Authentication auth) {
-        User user = usersRepository.findByFirebaseUid(uid);
-        if (user == null){
+        User user = usersRepository.findById(uid).orElseThrow();
+        if (user == null) {
             throw new ResponseStatusException(
-              HttpStatus.NOT_FOUND, "User not found");
+                    HttpStatus.NOT_FOUND, "User not found");
         }
         if (!user.getUid().equals(auth.getName()))
             throw new ResponseStatusException(
                     HttpStatus.FORBIDDEN, "Current user does not match user body");
         firebaseUserService.deleteUser(uid); // call firebase delete method
-        usersRepository.deleteById(user.getId());
+        usersRepository.deleteById(user.getUid());
     }
 }
