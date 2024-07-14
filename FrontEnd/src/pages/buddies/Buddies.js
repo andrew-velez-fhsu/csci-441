@@ -14,14 +14,9 @@ export default function Buddies() {
   const { userId } = UserAuth();
   const [buddies, setBuddies] = useState([]);
 
-  const getPets = async () => {
-    const myPets = await getPetsByUser(userId);
-    setBuddies(myPets);
-  };
-
   useEffect(() => {
-    getPets();
-  }, []);
+    getPetsByUser(userId).then((myPets) => setBuddies(myPets));
+  }, [getPetsByUser, userId]);
 
   const handleAddBuddy = async () => {
     const newPet = await addNewPet(userId);

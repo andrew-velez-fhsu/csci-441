@@ -106,3 +106,33 @@ ALTER TABLE public.pets
 ADD CONSTRAINT FK_Pets_Users FOREIGN KEY (uid) REFERENCES users(uid);
 COMMIT
 
+-- Remove ID key for users
+BEGIN TRANSACTION;
+ALTER TABLE public.users
+DROP COLUMN id;
+ALTER TABLE public.users
+ADD CONSTRAINT PK_Users PRIMARY KEY (uid);
+
+-- Drop existing UNIQUE key for users. Recreate foreign keys based on new primary key index
+ALTER TABLE public.pets
+DROP CONSTRAINT FK_Pets_Users;
+
+ALTER TABLE public.messages
+DROP CONSTRAINT FK_Recipient;
+
+ALTER TABLE public.messages
+DROP CONSTRAINT FK_Sender;
+
+ALTER TABLE public.users
+DROP CONSTRAINT users_uid_key;
+
+ALTER TABLE public.messages
+ADD CONSTRAINT FK_Recipient FOREIGN KEY (recipientUid) REFERENCES users(uid);
+
+ALTER TABLE public.messages
+ADD CONSTRAINT FK_Sender FOREIGN KEY (senderUid) REFERENCES users(uid);
+
+ALTER TABLE public.pets
+ADD CONSTRAINT FK_Pets_Users FOREIGN KEY (uid) REFERENCES users(uid);
+
+COMMIT

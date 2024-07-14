@@ -1,4 +1,13 @@
-import { Snackbar, Stack, Typography } from "@mui/material";
+import {
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Snackbar,
+  Stack,
+  Typography,
+} from "@mui/material";
 import Masterpage from "../../components/Masterpage";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
@@ -9,10 +18,10 @@ import { UserAuth } from "../../context/AuthContext";
 import { IconUserScan } from "@tabler/icons-react";
 import { styled } from "@mui/material/styles";
 import { Storage } from "../../context/StorageContext";
-import { AddAPhoto } from "@mui/icons-material";
+import { AddAPhoto, DeleteForever } from "@mui/icons-material";
 
 export default function Profile() {
-  const { getProfile, updateUser } = UserAuth();
+  const { getProfile, updateUser, deleteProfile } = UserAuth();
   const { uploadFile } = Storage();
 
   const [firstName, setFirstName] = useState("");
@@ -29,6 +38,9 @@ export default function Profile() {
   const [errLastName, setErrLastName] = useState(false);
   const [errEmail, setErrEmail] = useState(false);
   const [isSaved, setIsSaved] = useState(false);
+
+  const [openConfirmDeleteDiaglog, setOpenConfirmDeleteDiaglog] =
+    useState(false);
 
   const loadProfile = async () => {
     const pro = await getProfile();
@@ -66,6 +78,19 @@ export default function Profile() {
     };
     await updateUser(userRecord);
     setIsSaved(true);
+  };
+
+  const handleOpenConfirmDeleteDiaglog = () => {
+    setOpenConfirmDeleteDiaglog(true);
+  };
+
+  const handleCloseConfirmDeleteDiaglog = () => {
+    setOpenConfirmDeleteDiaglog(false);
+  };
+
+  const handleDeleteProfile = (e) => {
+    e.preventDefault();
+    deleteProfile();
   };
 
   const getProfilePicture = () => {
@@ -212,6 +237,40 @@ export default function Profile() {
               <Button variant="contained" color="primary" type="submit">
                 Save
               </Button>
+              <Button
+                sx={{ marginLeft: "5px" }}
+                startIcon={<DeleteForever />}
+                variant="outlined"
+                color="secondary"
+                onClick={handleOpenConfirmDeleteDiaglog}
+              >
+                Delete Account
+              </Button>
+              <Dialog
+                open={openConfirmDeleteDiaglog}
+                onClose={handleCloseConfirmDeleteDiaglog}
+                aria-labelledby="aler-delete-title"
+                aria-describedby="alert-delete-text"
+              >
+                <DialogTitle id="alert-delete-title">
+                  {"Delete account?"}
+                </DialogTitle>
+                <DialogContent>
+                  <DialogContentText id="alert-delete-text">
+                    Are you sure you want to delete your account? All
+                    information will be permanently deleted. You can re-create
+                    your account at any time.
+                  </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                  <Button onClick={handleCloseConfirmDeleteDiaglog} autoFocus>
+                    Cancel
+                  </Button>
+                  <Button onClick={handleDeleteProfile}>
+                    Yes, delete my account
+                  </Button>
+                </DialogActions>
+              </Dialog>
               <Snackbar
                 open={isSaved}
                 autoHideDuration={5000}

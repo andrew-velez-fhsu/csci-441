@@ -163,11 +163,11 @@ export default function EditBuddy({ buddy, handleDeletePet }) {
                 value={description}
                 fullWidth
                 required
-                multiline
-                minRows={3}
                 onChange={(e) => setDescription(e.target.value)}
                 error={errDescription}
                 sx={{ marginBottom: "1rem" }}
+                multiline
+                minRows={3}
               />
               <TextField
                 label="Breed"
@@ -185,6 +185,7 @@ export default function EditBuddy({ buddy, handleDeletePet }) {
                 onChange={(newValue) => setBirthday(newValue)}
                 sx={{ marginBottom: "1rem" }}
               />
+
               <FormGroup>
                 <FormControlLabel
                   sx={{ marginBottom: "1rem" }}

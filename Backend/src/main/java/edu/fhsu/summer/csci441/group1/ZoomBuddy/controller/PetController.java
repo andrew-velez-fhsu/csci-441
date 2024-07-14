@@ -1,6 +1,7 @@
 package edu.fhsu.summer.csci441.group1.ZoomBuddy.controller;
 
 import edu.fhsu.summer.csci441.group1.ZoomBuddy.data.PetsRepository;
+import edu.fhsu.summer.csci441.group1.ZoomBuddy.data.UsersRepository;
 import edu.fhsu.summer.csci441.group1.ZoomBuddy.model.Pet;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
@@ -11,10 +12,12 @@ import org.springframework.web.server.ResponseStatusException;
 @CrossOrigin
 public class PetController {
     private final PetsRepository petsRepository;
+    private final UsersRepository usersRepository;
 
     // constructor here
-    public PetController(PetsRepository petsRepository) {
+    public PetController(PetsRepository petsRepository, UsersRepository usersRepository) {
         this.petsRepository = petsRepository;
+        this.usersRepository = usersRepository;
     }
 
     // get pet by id ========================================================
@@ -22,7 +25,7 @@ public class PetController {
     public Pet getPetByid(@PathVariable("id") int id, Authentication auth) {
         var pet = this.petsRepository.findById(id).orElse(null);
         if (pet != null) {
-            if (!pet.getUid().equals(auth.getName()))
+            if (!pet.getOwner().getUid().equals(auth.getName()))
                 throw new ResponseStatusException(
                         HttpStatus.FORBIDDEN, "Pet does not belong to current user");
             else
@@ -47,11 +50,11 @@ public class PetController {
             throw new ResponseStatusException(
                     HttpStatus.FORBIDDEN, "Pet ID does not match updated pet");
 
-        if (!existingPet.getUid().equals(pet.getUid()))
+        if (!existingPet.getOwner().getUid().equals(pet.getOwner().getUid()))
             throw new ResponseStatusException(
                     HttpStatus.FORBIDDEN, "Cannot change pet owner");
 
-        if (!pet.getUid().equals(auth.getName()))
+        if (!pet.getOwner().getUid().equals(auth.getName()))
             throw new ResponseStatusException(
                     HttpStatus.FORBIDDEN, "Pet does not belong to current user");
 
@@ -64,10 +67,10 @@ public class PetController {
     // ==========================================================================
     @PostMapping("/pets")
     public Pet addPet(@RequestBody Pet pet, Authentication auth) {
-        if (pet.getUid().equals(auth.getName()))
-            return this.petsRepository.save(pet);
-        else
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Cannot add pet to another user");
+        var owner = usersRepository.findById(auth.getName()).orElseThrow();
+        pet.setOwner(owner);
+        return this.petsRepository.save(pet);
+
     }
 
     // Delete
@@ -77,7 +80,7 @@ public class PetController {
         var pet = this.petsRepository.findById(id).orElse(null);
 
         if (pet != null) {
-            if (!pet.getUid().equals(auth.getName()))
+            if (!pet.getOwner().getUid().equals(auth.getName()))
                 throw new ResponseStatusException(
                         HttpStatus.FORBIDDEN, "Pet does not belong to current user");
             else

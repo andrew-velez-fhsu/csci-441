@@ -1,11 +1,15 @@
 package edu.fhsu.summer.csci441.group1.ZoomBuddy.data;
 
-import edu.fhsu.summer.csci441.group1.ZoomBuddy.model.User;
+import java.util.List;
+
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-public interface UsersRepository extends CrudRepository<User, Integer> {
+import edu.fhsu.summer.csci441.group1.ZoomBuddy.model.User;
 
-    @Query("SELECT u FROM User u WHERE u.uid = :uid")
-    User findByFirebaseUid(@Param("uid") String uid);
+public interface UsersRepository extends CrudRepository<User, String> {
+
+    @Query(value = "SELECT * FROM users WHERE ST_DWithin(location, ST_MakePoint(:longitude, :latitude), :radius)", nativeQuery = true)
+    public List<User> GetUsersByDistanceFromLocation(@Param("radius") Double radius, @Param("latitude") Double latitude,
+            @Param("longitude") Double longitude);
 }
