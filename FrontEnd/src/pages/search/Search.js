@@ -1,8 +1,12 @@
 import {
   Box,
   Button,
+  FormControl,
   Grid,
+  InputLabel,
+  MenuItem,
   Paper,
+  Select,
   Stack,
   TextField,
   Typography,
@@ -19,6 +23,7 @@ import { UserAuth } from "../../context/AuthContext";
 
 export default function Search() {
   const [search, setSearch] = useState("");
+  const [radius, setRadius] = useState("5");
   const [pets, setPets] = useState([]);
   const { searchPets } = Pets();
   const location = useLocation();
@@ -28,6 +33,7 @@ export default function Search() {
     e.preventDefault();
     const searchParams = {
       search: search,
+      radius: radius,
     };
 
     const foundPets = await searchPets(searchParams);
@@ -61,7 +67,8 @@ export default function Search() {
                   <TextField
                     variant="outlined"
                     value={search}
-                    sx={{ flexGrow: 1 }}
+                    sx={{ flexGrow: 1, marginRight: "1rem" }}
+                    label="Filter search"
                     onChange={(e) => setSearch(e.target.value)}
                   />
                   <Button
@@ -73,6 +80,29 @@ export default function Search() {
                   >
                     <SearchIcon />
                   </Button>
+                </Box>
+                <Box sx={{ display: "flex", marginTop: "1rem" }}>
+                  <FormControl fullWidth>
+                    <InputLabel id="search-radius-label">
+                      Search Radius
+                    </InputLabel>
+                    <Select
+                      labelId="search-radius-label"
+                      id="search-radius"
+                      value={radius}
+                      label="Search radius"
+                      onChange={(e) => setRadius(e.target.value)}
+                    >
+                      <MenuItem value={"5"}>5 miles</MenuItem>
+                      <MenuItem value={"10"}>10 miles</MenuItem>
+                      <MenuItem value={"15"}>15 miles</MenuItem>
+                      <MenuItem value={"20"}>20 miles</MenuItem>
+                      <MenuItem value={"25"}>25 miles</MenuItem>
+                      <MenuItem value={"30"}>30 miles</MenuItem>
+                      <MenuItem value={"40"}>40 miles</MenuItem>
+                      <MenuItem value={"50"}>50 miles</MenuItem>
+                    </Select>
+                  </FormControl>
                 </Box>
               </form>
             </Stack>
