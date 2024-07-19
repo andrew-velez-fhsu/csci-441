@@ -136,3 +136,9 @@ ALTER TABLE public.pets
 ADD CONSTRAINT FK_Pets_Users FOREIGN KEY (uid) REFERENCES users(uid);
 
 COMMIT
+
+BEGIN TRANSACTION;
+ALTER TABLE public.pets
+ADD COLUMN profileUrl varchar;
+
+COMMIT;

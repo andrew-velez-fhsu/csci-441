@@ -15,12 +15,12 @@ public class Pet {
     private String name;
     private String breed;
     private String description;
-    // private String uid;
     private Date birthday;
     @JsonProperty("isGoodWithChildren")
     private boolean isGoodWithChildren;
     @JsonProperty("isResourceProtective")
     private boolean isResourceProtective;
+    private String profileUrl;
 
     @ManyToOne
     @JoinColumn(name = "uid")
@@ -70,14 +70,6 @@ public class Pet {
         this.description = description;
     }
 
-    // public String getUid() {
-    // return uid;
-    // }
-
-    // public void setUid(String uid) {
-    // this.uid = uid;
-    // }
-
     public Date getbirthday() {
         return birthday;
     }
@@ -100,5 +92,13 @@ public class Pet {
 
     public void setResourceProtective(boolean resourceProtective) {
         isResourceProtective = resourceProtective;
+    }
+
+    public String getProfileUrl() {
+        return profileUrl;
+    }
+
+    public void setProfileUrl(String profileUrl) {
+        this.profileUrl = profileUrl;
     }
 }

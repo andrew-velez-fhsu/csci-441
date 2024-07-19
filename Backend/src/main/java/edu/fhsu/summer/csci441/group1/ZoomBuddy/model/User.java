@@ -25,17 +25,6 @@ public class User {
     private Double latitude;
     private Point location;
 
-    // @OneToMany(mappedBy = "owner", fetch = FetchType.LAZY)
-    // private List<Pet> pets;
-
-    // public List<Pet> getPets() {
-    // return pets;
-    // }
-
-    // public void setPets(List<Pet> pets) {
-    // this.pets = pets;
-    // }
-
     public User() {
 
     }

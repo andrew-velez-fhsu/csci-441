@@ -59,7 +59,7 @@ export default function BuddyDetails() {
           >
             <img
               className="pet-profile"
-              src={buddy?.photoUrl ? buddy.photoUrl : noPetPhoto}
+              src={buddy?.profileUrl ? buddy.profileUrl : noPetPhoto}
               alt={buddy?.name}
             />
           </Paper>
