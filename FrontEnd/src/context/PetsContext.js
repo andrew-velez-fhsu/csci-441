@@ -98,6 +98,9 @@ export const PetsContextProvider = ({ children }) => {
       params.append("lat", location.lat);
       params.append("lon", location.lon);
     }
+    if (props.radius) {
+      params.append("radius", props.radius);
+    }
 
     const queryParams = params.toString();
 
