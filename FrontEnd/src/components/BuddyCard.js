@@ -42,7 +42,7 @@ export default function BuddyCard({ buddy, isLoggedIn }) {
     <>
       <Card elevation={5}>
         <CardMedia
-          image={buddy.photoUrl ? buddy.photoUrl : noPetPhoto}
+          image={buddy.profileUrl ? buddy.profileUrl : noPetPhoto}
           sx={{ height: 180 }}
         />
         <CardContent>

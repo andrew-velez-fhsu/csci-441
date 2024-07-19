@@ -42,8 +42,8 @@ export default function EditBuddy({ buddy, handleDeletePet }) {
       ? buddyProfile.isResourceProtective
       : false
   );
-  const [photoUrl, setPhotoUrl] = useState(
-    buddyProfile.photoUrl ? buddyProfile.photoUrl : null
+  const [profileUrl, setProfileUrl] = useState(
+    buddyProfile.profileUrl ? buddyProfile.profileUrl : null
   );
   const [errName, setErrName] = useState(false);
   const [errDescription, setErrDescription] = useState(false);
@@ -69,8 +69,8 @@ export default function EditBuddy({ buddy, handleDeletePet }) {
     width: 1,
   });
   const getProfilePicture = () => {
-    if (photoUrl) {
-      return <img width="100%" src={photoUrl} alt="Profile" />;
+    if (profileUrl) {
+      return <img width="100%" src={profileUrl} alt="Profile" />;
     } else {
       return <IconDog color="gray" stroke={1} width="100%" height="100%" />;
     }
@@ -81,9 +81,9 @@ export default function EditBuddy({ buddy, handleDeletePet }) {
     try {
       const profileUrl = await uploadFile(file, "pets");
 
-      setPhotoUrl(profileUrl);
+      setProfileUrl(profileUrl);
       //update pet
-      await updatePet({ ...buddyProfile, photoUrl: profileUrl }, userProfile);
+      await updatePet({ ...buddyProfile, profileUrl: profileUrl }, userProfile);
     } catch (err) {
       console.warn(err);
     }
@@ -105,7 +105,7 @@ export default function EditBuddy({ buddy, handleDeletePet }) {
         description,
         breed,
         birthday,
-        photoUrl,
+        profileUrl,
         isGoodWithChildren,
         isResourceProtective,
       };

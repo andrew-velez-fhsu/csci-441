@@ -25,11 +25,7 @@ public class PetController {
     public Pet getPetByid(@PathVariable("id") int id, Authentication auth) {
         var pet = this.petsRepository.findById(id).orElse(null);
         if (pet != null) {
-            if (!pet.getOwner().getUid().equals(auth.getName()))
-                throw new ResponseStatusException(
-                        HttpStatus.FORBIDDEN, "Pet does not belong to current user");
-            else
-                return pet;
+            return pet;
         } else
             throw new ResponseStatusException(
                     HttpStatus.NOT_FOUND, "Pet not found");
