@@ -4,12 +4,16 @@ import edu.fhsu.summer.csci441.group1.ZoomBuddy.model.Message;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
+
 public interface MessagesRepository extends CrudRepository<Message, Integer> {
 
-//    @Query("SELECT m FROM Message m WHERE m.recipientUid = :uid and m.status = 'unread' ")
-//    Iterable<Message> getAllUnreadMessages(@Param("uid") String uid);
-//
-//    @Query("Select m From Message m WHERE m.threadId = :threadId")
-//    Iterable<Message> getMessagesByChatId(@Param("threadId") int threadId);
+
+    @Query("SELECT m FROM Message m WHERE m.recipientUid = :uid and m.status = 'unread' ")
+    Iterable<Message> getAllUnreadMessages(@Param("uid") String uid);
+
+
+    @Query("Select m From Message m WHERE m.threadId = :threadId")
+    Iterable<Message> getMessagesByThreadId(@Param("threadId") int threadId);
 
 }

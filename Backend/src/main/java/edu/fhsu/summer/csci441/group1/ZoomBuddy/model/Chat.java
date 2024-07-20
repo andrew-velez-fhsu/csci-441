@@ -25,7 +25,7 @@ public class Chat {
     private String senderUid;
     private String recipientUid;
 
-    @OneToMany(mappedBy = "chat")
+    @OneToMany
     private List<Message> messages = new ArrayList<>();
 
     private LocalDateTime timestamp;

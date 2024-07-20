@@ -32,11 +32,10 @@ Table "users" contain the following columns:
 - profileUrl : a link to a profile picture for the user. Optional
 */
 CREATE TABLE IF NOT EXISTS public.users(
-    id SERIAL PRIMARY KEY,
+    uid VARCHAR PRIMARY KEY,
     displayname VARCHAR(255) NOT NULL,
     firstname VARCHAR(127) NOT NULL,
     lastname VARCHAR(127) NOT NULL,
-    uid VARCHAR(36) NOT NULL UNIQUE,
     email VARCHAR(320) NOT NULL UNIQUE,
     address1 VARCHAR(255),
     address2 VARCHAR(255),
@@ -62,17 +61,31 @@ CREATE TABLE IF NOT EXISTS public.pets(
 
 CREATE TABLE IF NOT EXISTS public.messages (
     id SERIAL PRIMARY KEY,
-    threadId INTEGER NOT NULL,
-    senderUid VARCHAR(36) NOT NULL,
-    recipientUid VARCHAR(36) NOT NULL,
+    chatId INTEGER NOT NULL,
+    sendBy VARCHAR(50) NOT NULL,
     body VARCHAR ,
     status VARCHAR(255),
-    date DATE,
-    CONSTRAINT FK_Sender    FOREIGN KEY (senderUid) REFERENCES users(uid),
-    CONSTRAINT FK_Recipient    FOREIGN KEY (recipientUid) REFERENCES users(uid)
+    timestamp DATE,
+    CONSTRAINT FK_Chat    FOREIGN KEY (chatId) REFERENCES chats(id)
 )
 
 -- DROP TABLE public.messages CASCADE
+
+CREATE TABLE IF NOT EXISTS public.chats(
+    id SERIAL PRIMARY KEY,
+    subject VARCHAR,
+    senderUid VARCHAR(50) NOT NULL,
+    recipientUid VARCHAR(50) NOT NULL,
+    messages VARCHAR,
+    date Date,
+    CONSTRAINT FK_Sender    FOREIGN KEY (senderUid) REFERENCES users(uid),
+    CONSTRAINT FK_Recipient    FOREIGN KEY (recipientUid) REFERENCES users(uid)
+);
+
+
+-- DROP TABLE public.chats CASCADE
+
+
 
 CREATE TABLE IF NOT EXISTS public.photos(
     id SERIAL PRIMARY KEY,
@@ -88,6 +101,7 @@ GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public to web;
 GRANT USAGE ON SEQUENCE users_id_seq TO web;
 GRANT USAGE ON SEQUENCE pets_id_seq TO web;
 GRANT USAGE ON SEQUENCE messages_id_seq TO web;
+GRANT USAGE ON SEQUENCE chats_id_seq TO web;
 GRANT USAGE ON SEQUENCE photos_id_seq TO web;
 
 
@@ -107,11 +121,11 @@ ADD CONSTRAINT FK_Pets_Users FOREIGN KEY (uid) REFERENCES users(uid);
 COMMIT
 
 -- Remove ID key for users
-BEGIN TRANSACTION;
-ALTER TABLE public.users
-DROP COLUMN id;
-ALTER TABLE public.users
-ADD CONSTRAINT PK_Users PRIMARY KEY (uid);
+-- BEGIN TRANSACTION;
+-- ALTER TABLE public.users
+-- DROP COLUMN id;
+-- ALTER TABLE public.users
+-- ADD CONSTRAINT PK_Users PRIMARY KEY (uid);
 
 -- Drop existing UNIQUE key for users. Recreate foreign keys based on new primary key index
 ALTER TABLE public.pets
@@ -123,8 +137,8 @@ DROP CONSTRAINT FK_Recipient;
 ALTER TABLE public.messages
 DROP CONSTRAINT FK_Sender;
 
-ALTER TABLE public.users
-DROP CONSTRAINT users_uid_key;
+-- ALTER TABLE public.users
+-- DROP CONSTRAINT users_uid_key;
 
 ALTER TABLE public.messages
 ADD CONSTRAINT FK_Recipient FOREIGN KEY (recipientUid) REFERENCES users(uid);
@@ -134,7 +148,6 @@ ADD CONSTRAINT FK_Sender FOREIGN KEY (senderUid) REFERENCES users(uid);
 
 ALTER TABLE public.pets
 ADD CONSTRAINT FK_Pets_Users FOREIGN KEY (uid) REFERENCES users(uid);
-
 COMMIT
 
 BEGIN TRANSACTION;

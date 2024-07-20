@@ -31,7 +31,7 @@ public class ChatController {
         this.messagesRepository = messagesRepository;
     }
 
-    @PostMapping("/api/chats/create")
+    @PostMapping("/api/chats")
     public Chat createChat(Authentication sender, User recipient, Pet subjectPet, Message message) {
 
         Chat isExist = chatRepository.findChatByUsersId(recipient, sender);
@@ -63,8 +63,8 @@ public class ChatController {
 
 
     // Get Messages By Chat  ==========================================
-    @GetMapping("/messages")
-    public List<Message> getMessagesByChats(Authentication auth, Chat chat) {
+    @GetMapping("/chats/{id}")
+    public List<Message> getMessagesByChats(Authentication auth,  Chat chat, @PathVariable("id") String uid) {
         // Retrieve the authenticated user
         String username = auth.getName();
         User user = usersRepository.findByUsername(username)
@@ -73,15 +73,16 @@ public class ChatController {
         // Check if the user is a participant in the chat
         if (!chat.getSenderUid().equals(user.getUid())) throw new RuntimeException("User is not a participant in the chat");
 
-        // Retrieve and return the messages in the chat
-        return (List<Message>) chatRepository.findChatById(chat.getId());
+        List<Message> message = chatRepository.findByUsersId(uid);
+
+        return message;
     }
 
 
     // get Chat for current user  ========================================================
-    @GetMapping("/messages/{id}")
-    public List<Chat> getChatsForCurrentUser(@PathVariable("id") int id, Authentication auth) {
-        var chats = this.chatRepository.findChatById(id);
+    @GetMapping("/chats")
+    public List<Chat> getChatsForCurrentUser(@PathVariable("id") User recipient, Authentication sender) {
+        var chats = this.chatRepository.findChatByUsersId(recipient, sender);
         if (chats != null) {
             return (List<Chat>) chats;
         } else
@@ -89,8 +90,9 @@ public class ChatController {
                     HttpStatus.NOT_FOUND, "Message not found");
     }
 
+
     // Reply to  chat   ========================================================================
-    @PostMapping("/{chatId}/reply")
+    @PostMapping("/chats/{chatId}")
     public void replyToChat(Authentication sender, Chat chat, @PathVariable("chatId") Message message) {
         // Retrieve the authenticated user
         String username = sender.getName();

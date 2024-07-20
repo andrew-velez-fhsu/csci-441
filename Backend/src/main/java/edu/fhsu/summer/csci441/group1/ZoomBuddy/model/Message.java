@@ -1,17 +1,9 @@
 package edu.fhsu.summer.csci441.group1.ZoomBuddy.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
+import java.sql.Date;
 import java.time.LocalDateTime;
-
-@Getter   // Lombok Getter and Setter
-@Setter
-@NoArgsConstructor  // Lombok constructors
-@AllArgsConstructor
 
 @Entity
 @Table(name = "messages")
@@ -22,47 +14,71 @@ public class Message {
     private int id;
     private int chatId;
     private String sendBy;
+//    private String recipientUid;
     private String body;
     private String status;
     private LocalDateTime timestamp;
 
-    // I included Lombok dependency which creates all Getters, Setters  and necessary  Constructors
 
 
-//    // constructor here
-//    public Message() {
-//
+    // constructor here
+    public Message() {
+
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getChatId() {
+        return chatId;
+    }
+
+    public void setChatId(int chatId) {
+        this.chatId = chatId;
+    }
+
+    public String getSendBy() {
+        return sendBy;
+    }
+
+    public void setSendBy(String sendBy) {
+        this.sendBy = sendBy;
+    }
+
+//    public String getRecipientUid() {
+//        return recipientUid;
 //    }
 //
-//    public int getId() {
-//        return id;
+//    public void setRecipientUid(String recipientUid) {
+//        this.recipientUid = recipientUid;
 //    }
-//
-//    public void setId(int id) {
-//        this.id = id;
-//    }
-//
-//    public String getBody() {
-//        return body;
-//    }
-//
-//    public void setBody(String body) {
-//        this.body = body;
-//    }
-//
-//    public String getStatus() {
-//        return status;
-//    }
-//
-//    public void setStatus(String status) {
-//        this.status = status;
-//    }
-//
-//    public Date getDate() {
-//        return date;
-//    }
-//
-//    public void setDate(Date date) {
-//        this.date = date;
-//    }
+
+    public String getBody() {
+        return body;
+    }
+
+    public void setBody(String body) {
+        this.body = body;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public LocalDateTime getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(LocalDateTime timestamp) {
+        this.timestamp = timestamp;
+    }
 }
