@@ -1,9 +1,11 @@
 package edu.fhsu.summer.csci441.group1.ZoomBuddy.data;
 
-import java.util.Optional;
-
+import edu.fhsu.summer.csci441.group1.ZoomBuddy.model.Chat;
+import edu.fhsu.summer.csci441.group1.ZoomBuddy.model.User;
 import org.springframework.data.repository.NoRepositoryBean;
 import org.springframework.data.repository.Repository;
+
+import java.util.Optional;
 
 @NoRepositoryBean
 public interface CrudRepository<T, ID> extends Repository<T, ID> {
@@ -12,7 +14,7 @@ public interface CrudRepository<T, ID> extends Repository<T, ID> {
 
     <S extends T> Iterable<S> saveAll(Iterable<S> entities);
 
-    Optional<T> findById(ID id);
+    User findById(ID id);
 
     boolean existsById(ID id);
 
@@ -31,4 +33,8 @@ public interface CrudRepository<T, ID> extends Repository<T, ID> {
     void deleteAll(Iterable<? extends T> entities);
 
     void deleteAll();
+
+    Chat findChatById(Integer chatId);
+
+    Optional<User> findByUsername(String username);
 }

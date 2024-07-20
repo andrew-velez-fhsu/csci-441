@@ -1,8 +1,17 @@
 package edu.fhsu.summer.csci441.group1.ZoomBuddy.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import java.sql.Date;
+import java.time.LocalDateTime;
+
+@Getter   // Lombok Getter and Setter
+@Setter
+@NoArgsConstructor  // Lombok constructors
+@AllArgsConstructor
 
 @Entity
 @Table(name = "messages")
@@ -11,71 +20,49 @@ public class Message {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 
     private int id;
-    private int threadId;
-    private String senderUid;
-    private String recipientUid;
+    private int chatId;
+    private String sendBy;
     private String body;
     private String status;
-    private Date date;
+    private LocalDateTime timestamp;
 
-    // constructor here
-    public Message() {
+    // I included Lombok dependency which creates all Getters, Setters  and necessary  Constructors
 
-    }
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public int getThreadId() {
-        return threadId;
-    }
-
-    public void setThreadId(int threadId) {
-        this.threadId = threadId;
-    }
-
-    public String getSenderUid() {
-        return senderUid;
-    }
-
-    public void setSenderUid(String senderUid) {
-        this.senderUid = senderUid;
-    }
-
-    public String getRecipientUid() {
-        return recipientUid;
-    }
-
-    public void setRecipientUid(String recipientUid) {
-        this.recipientUid = recipientUid;
-    }
-
-    public String getBody() {
-        return body;
-    }
-
-    public void setBody(String body) {
-        this.body = body;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public Date getDate() {
-        return date;
-    }
-
-    public void setDate(Date date) {
-        this.date = date;
-    }
+//    // constructor here
+//    public Message() {
+//
+//    }
+//
+//    public int getId() {
+//        return id;
+//    }
+//
+//    public void setId(int id) {
+//        this.id = id;
+//    }
+//
+//    public String getBody() {
+//        return body;
+//    }
+//
+//    public void setBody(String body) {
+//        this.body = body;
+//    }
+//
+//    public String getStatus() {
+//        return status;
+//    }
+//
+//    public void setStatus(String status) {
+//        this.status = status;
+//    }
+//
+//    public Date getDate() {
+//        return date;
+//    }
+//
+//    public void setDate(Date date) {
+//        this.date = date;
+//    }
 }
