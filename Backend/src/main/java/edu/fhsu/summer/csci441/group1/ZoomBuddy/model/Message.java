@@ -8,9 +8,9 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 
-@Getter   // Lombok Getter and Setter
+@Getter // Lombok Getter and Setter
 @Setter
-@NoArgsConstructor  // Lombok constructors
+@NoArgsConstructor // Lombok constructors
 @AllArgsConstructor
 
 @Entity
@@ -20,49 +20,50 @@ public class Message {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 
     private int id;
+    // TODO - convert to many to one chat
     private int chatId;
     private String sendBy;
     private String body;
     private String status;
     private LocalDateTime timestamp;
 
-    // I included Lombok dependency which creates all Getters, Setters  and necessary  Constructors
+    // I included Lombok dependency which creates all Getters, Setters and necessary
+    // Constructors
 
-
-//    // constructor here
-//    public Message() {
-//
-//    }
-//
-//    public int getId() {
-//        return id;
-//    }
-//
-//    public void setId(int id) {
-//        this.id = id;
-//    }
-//
-//    public String getBody() {
-//        return body;
-//    }
-//
-//    public void setBody(String body) {
-//        this.body = body;
-//    }
-//
-//    public String getStatus() {
-//        return status;
-//    }
-//
-//    public void setStatus(String status) {
-//        this.status = status;
-//    }
-//
-//    public Date getDate() {
-//        return date;
-//    }
-//
-//    public void setDate(Date date) {
-//        this.date = date;
-//    }
+    // // constructor here
+    // public Message() {
+    //
+    // }
+    //
+    // public int getId() {
+    // return id;
+    // }
+    //
+    // public void setId(int id) {
+    // this.id = id;
+    // }
+    //
+    // public String getBody() {
+    // return body;
+    // }
+    //
+    // public void setBody(String body) {
+    // this.body = body;
+    // }
+    //
+    // public String getStatus() {
+    // return status;
+    // }
+    //
+    // public void setStatus(String status) {
+    // this.status = status;
+    // }
+    //
+    // public Date getDate() {
+    // return date;
+    // }
+    //
+    // public void setDate(Date date) {
+    // this.date = date;
+    // }
 }

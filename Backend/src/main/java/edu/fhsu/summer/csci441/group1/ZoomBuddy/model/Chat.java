@@ -7,10 +7,9 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-
 @Getter // Lombok Getter and Setter
 @Setter
-@AllArgsConstructor   // Lombok constructors
+@AllArgsConstructor // Lombok constructors
 @NoArgsConstructor
 
 @Entity
@@ -20,15 +19,16 @@ public class Chat {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
     private Pet subjectPet;
+    // TODO - convert to many to one User
     private String senderUid;
+    // TODO - convert to many to one User
     private String recipientUid;
 
     @OneToMany(mappedBy = "chat")
     private List<Message> messages = new ArrayList<>();
 
     private LocalDateTime timestamp;
-
 
 }
