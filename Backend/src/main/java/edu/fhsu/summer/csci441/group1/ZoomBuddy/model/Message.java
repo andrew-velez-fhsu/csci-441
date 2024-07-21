@@ -12,14 +12,13 @@ public class Message {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 
     private int id;
+    // TODO - convert to many to one chat
     private int chatId;
     private String sendBy;
 //    private String recipientUid;
     private String body;
     private String status;
     private LocalDateTime timestamp;
-
-
 
     // constructor here
     public Message() {
@@ -81,4 +80,5 @@ public class Message {
     public void setTimestamp(LocalDateTime timestamp) {
         this.timestamp = timestamp;
     }
+
 }
