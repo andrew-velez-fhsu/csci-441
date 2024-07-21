@@ -63,7 +63,7 @@ public class PetController {
     // ==========================================================================
     @PostMapping("/pets")
     public Pet addPet(@RequestBody Pet pet, Authentication auth) {
-        var owner = usersRepository.findById(Integer.parseInt(auth.getName())).orElseThrow();
+        var owner = usersRepository.findById(auth.getName()).orElseThrow();
         pet.setOwner(owner);
         return this.petsRepository.save(pet);
 

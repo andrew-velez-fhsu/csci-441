@@ -8,12 +8,4 @@ import java.util.List;
 
 public interface MessagesRepository extends CrudRepository<Message, Integer> {
 
-
-    @Query("SELECT m FROM Message m WHERE m.recipientUid = :uid and m.status = 'unread' ")
-    Iterable<Message> getAllUnreadMessages(@Param("uid") String uid);
-
-
-    @Query("Select m From Message m WHERE m.threadId = :threadId")
-    Iterable<Message> getMessagesByThreadId(@Param("threadId") int threadId);
-
 }

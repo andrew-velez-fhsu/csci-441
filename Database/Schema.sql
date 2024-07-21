@@ -59,17 +59,6 @@ CREATE TABLE IF NOT EXISTS public.pets(
 );
 -- DROP TABLE public.pets CASCADE
 
-CREATE TABLE IF NOT EXISTS public.messages (
-    id SERIAL PRIMARY KEY,
-    chatId INTEGER NOT NULL,
-    sendBy VARCHAR(50) NOT NULL,
-    body VARCHAR ,
-    status VARCHAR(255),
-    timestamp DATE,
-    CONSTRAINT FK_Chat    FOREIGN KEY (chatId) REFERENCES chats(id)
-)
-
--- DROP TABLE public.messages CASCADE
 
 CREATE TABLE IF NOT EXISTS public.chats(
     id SERIAL PRIMARY KEY,
@@ -84,6 +73,19 @@ CREATE TABLE IF NOT EXISTS public.chats(
 
 
 -- DROP TABLE public.chats CASCADE
+
+CREATE TABLE IF NOT EXISTS public.messages (
+    id SERIAL PRIMARY KEY,
+    chatId INTEGER NOT NULL,
+    sendBy VARCHAR(50) NOT NULL,
+    body VARCHAR ,
+    status VARCHAR(255),
+    timestamp DATE,
+    CONSTRAINT FK_Chat    FOREIGN KEY (chatId) REFERENCES chats(id)
+)
+
+-- DROP TABLE public.messages CASCADE
+
 
 
 
@@ -154,4 +156,16 @@ BEGIN TRANSACTION;
 ALTER TABLE public.pets
 ADD COLUMN profileUrl varchar;
 
+COMMIT;
+
+
+BEGIN TRANSACTION;
+ALTER TABLE public.messages
+DROP COLUMN sendBy;
+
+ALTER TABLE public.messages
+ADD COLUMN senderUid VARCHAR NOT NULL CONSTRAINT FK_Sender   REFERENCES users(uid);
+
+ALTER TABLE public.chats
+DROP COLUMN messages;
 COMMIT;

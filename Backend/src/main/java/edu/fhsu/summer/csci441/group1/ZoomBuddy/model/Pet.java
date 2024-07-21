@@ -5,11 +5,9 @@ import jakarta.persistence.*;
 import java.sql.Date;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Data;
 
 @Entity
 @Table(name = "pets")
-@Data
 public class Pet {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

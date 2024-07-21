@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -52,8 +53,7 @@ public class ChatController {
         Chat chat = new Chat(); // create new chat
 
         chat.setTimestamp(LocalDateTime.now());
-        // TODO: change to string, use subject above
-        chat.setSubjectPet(subjectPet);
+        chat.setSubject(subject);
 
         // Save the chat to get the generated ID
         // chat = chatRepository.save(chat);
@@ -72,32 +72,32 @@ public class ChatController {
 
     // Get Messages By Chat ==========================================
     @GetMapping("/chats/{chatId}/messages")
-    public List<Message> getMessagesByChats(Authentication auth, @PathVariable("chatId") long chatId) {
+    public List<Message> getMessagesByChats(Authentication auth, @PathVariable("chatId") Integer chatId) {
         // Retrieve the authenticated user
-        String username = auth.getName();
-        User user = usersRepository.findByUsername(username)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+        User user = usersRepository.findById(auth.getName())
+                .orElseThrow();
 
+        var chat = chatRepository.findById(chatId).orElseThrow();
         // Check if the user is a participant in the chat
         // TODO - after convert chat.sender and chat.recipient to user\
         // NOTE - you do this multiple times, you should put this into a separate
         // private method
-        if (!chat.getSenderUid().equals(user.getUid()))
+        if (!chat.getSender().getUid().equals(user.getUid()))
             throw new RuntimeException("User is not a participant in the chat");
 
-        List<Message> message = chatRepository.findByUsersId(uid);
+        List<Message> messages = chat.getMessages();//chatRepository.findByUsersId(auth.getName());
 
-        return message;
+        return messages;
     }
 
     // get Chat for current user
     // ========================================================
     @GetMapping("/chats")
     public List<Chat> getChatsForCurrentUser(Authentication auth) {
-        //TODO: get all chats where user is either sender or recipient
-        var chats = this.chatRepository.NEED_NEW_METHOD
+        // TODO: get all chats where user is either sender or recipient
+        var chats = new ArrayList<Chat>();// replace stub with this.chatRepository.NEED_NEW_METHOD
         if (chats != null) {
-            return (List<Chat>) chats;
+            return chats;
         } else
             throw new ResponseStatusException(
                     HttpStatus.NOT_FOUND, "Message not found");
@@ -109,8 +109,8 @@ public class ChatController {
     public void replyToChat(Authentication sender, @PathVariable("chatId") Integer chatId,
             @RequestBody Message message) {
         // Retrieve the authenticated user
-        String username = sender.getName();
-        User senders = usersRepository.findByUsername(username)
+        String uid = sender.getName();
+        User senders = usersRepository.findById(uid)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         // get the chat by id
@@ -118,9 +118,9 @@ public class ChatController {
 
         // Check if the user is a participant in the chat
         // TODO: fix after chat.sender and chat.recepient is converted to user
-        if (!chat.getRecipientUid().contains((CharSequence) sender)) {
-            throw new RuntimeException("User is not a participant in the chat");
-        }
+        // if (!chat.getRecipientUid().contains((CharSequence) sender)) {
+        // throw new RuntimeException("User is not a participant in the chat");
+        // }
         // Set the message properties
         message.setSendBy(message.getSendBy());
         message.setChatId(message.getChatId());
