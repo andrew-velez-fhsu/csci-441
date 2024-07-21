@@ -40,7 +40,7 @@ public class UserController {
 
     @GetMapping("/users/{id}")
     public User getUserByUid(@PathVariable("id") String uid, Authentication auth) {
-        var user = this.usersRepository.findById(uid).orElseThrow();
+        var user = this.usersRepository.findById(Integer.parseInt(uid)).orElseThrow();  //type error (int & string conflict from CrudRepository -> findById
         if (user != null) {
             if (!user.getUid().equals(auth.getName()))
                 throw new ResponseStatusException(
@@ -53,7 +53,7 @@ public class UserController {
 
     @GetMapping("/users/{uid}/pets")
     public Iterable<Pet> getPetsByUser(@PathVariable("uid") String uid, Authentication auth) {
-        var user = this.usersRepository.findById(uid).orElseThrow();
+        var user = this.usersRepository.findById(Integer.parseInt(uid)).orElseThrow();  //type error (int & string conflict from CrudRepository -> findById
         if (user != null) {
             return this.petsRepository.findAllPetsByUser(uid);
         } else
@@ -108,7 +108,7 @@ public class UserController {
 
     @DeleteMapping("/users/{uid}")
     public void deleteUser(@PathVariable("uid") String uid, Authentication auth) {
-        User user = usersRepository.findById(uid).orElseThrow();
+        User user = usersRepository.findById(Integer.parseInt(uid)).orElseThrow();  //type error (int & string conflict from CrudRepository -> findById
         if (user == null) {
             throw new ResponseStatusException(
                     HttpStatus.NOT_FOUND, "User not found");

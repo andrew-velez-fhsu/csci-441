@@ -85,8 +85,9 @@ public class ChatController {
         if (!chat.getSenderUid().equals(user.getUid()))
             throw new RuntimeException("User is not a participant in the chat");
 
-        // Retrieve and return the messages in the chat
-        return (List<Message>) chatRepository.findChatById(chat.getId());
+        List<Message> message = chatRepository.findByUsersId(uid);
+
+        return message;
     }
 
     // get Chat for current user

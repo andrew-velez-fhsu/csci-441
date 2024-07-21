@@ -26,7 +26,7 @@ public class Chat {
     // TODO - convert to many to one User
     private String recipientUid;
 
-    @OneToMany(mappedBy = "chat")
+    @OneToMany
     private List<Message> messages = new ArrayList<>();
 
     private LocalDateTime timestamp;
