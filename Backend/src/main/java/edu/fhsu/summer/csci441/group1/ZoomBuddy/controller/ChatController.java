@@ -5,6 +5,7 @@ import edu.fhsu.summer.csci441.group1.ZoomBuddy.data.MessagesRepository;
 import edu.fhsu.summer.csci441.group1.ZoomBuddy.data.PetsRepository;
 import edu.fhsu.summer.csci441.group1.ZoomBuddy.data.UsersRepository;
 import edu.fhsu.summer.csci441.group1.ZoomBuddy.entities.CreateChatRequest;
+import edu.fhsu.summer.csci441.group1.ZoomBuddy.entities.ReplyToChatRequest;
 import edu.fhsu.summer.csci441.group1.ZoomBuddy.model.Chat;
 import edu.fhsu.summer.csci441.group1.ZoomBuddy.model.Message;
 import edu.fhsu.summer.csci441.group1.ZoomBuddy.model.User;
@@ -80,7 +81,7 @@ public class ChatController {
         // TODO - after convert chat.sender and chat.recipient to user\
         // NOTE - you do this multiple times, you should put this into a separate
         // private method
-        if (!chat.getSender().getUid().equals(user.getUid()))
+        if (!chat.getSender().getUid().equals(user.getUid()) && !chat.getRecipient().getUid().equals((user.getUid())))
             throw new RuntimeException("User is not a participant in the chat");
 
         List<Message> messages = chat.getMessages();// chatRepository.findByUsersId(auth.getName());
@@ -92,8 +93,10 @@ public class ChatController {
     // ========================================================
     @GetMapping("/chats")
     public List<Chat> getChatsForCurrentUser(Authentication auth) {
-        // TODO: get all chats where user is either sender or recipient
-        var chats = new ArrayList<Chat>();// replace stub with this.chatRepository.NEED_NEW_METHOD
+        // Get user
+        var user = usersRepository.findById(auth.getName()).orElseThrow();
+        // Get chats for the user
+        var chats = this.chatRepository.findByUser(user);
         return chats;
     }
 
@@ -101,7 +104,7 @@ public class ChatController {
     // ========================================================================
     @PostMapping("/chats/{chatId}/messages")
     public void replyToChat(Authentication auth, @PathVariable("chatId") Integer chatId,
-            @RequestBody String messageText) {
+            @RequestBody ReplyToChatRequest replyToChatRequest) {
         // Retrieve the authenticated user
         String uid = auth.getName();
         User sender = usersRepository.findById(uid)
@@ -119,7 +122,7 @@ public class ChatController {
         var message = new Message();
         message.setSentBy(sender);
         message.setChat(chat);
-        message.setBody(messageText);
+        message.setBody(replyToChatRequest.getMessageText());
         message.setTimestamp(LocalDateTime.now());
 
         // Save the message

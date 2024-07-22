@@ -14,6 +14,9 @@ export default function MessageCard({ from, body, date, state }) {
     color: theme.palette.text.secondary,
   }));
 
+  const messageTimestamp = Date.parse(date);
+  const messageDate = new Date(messageTimestamp);
+
   return (
     <Item className={messageClass}>
       <Stack spacing={2} direction="row" alignItems="center">
@@ -26,6 +29,7 @@ export default function MessageCard({ from, body, date, state }) {
 
         <Typography variant="div">{body}</Typography>
       </Stack>
+      <Typography variant="caption">{messageDate.toDateString()}</Typography>
     </Item>
   );
 }

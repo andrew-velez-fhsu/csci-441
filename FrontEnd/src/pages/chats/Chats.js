@@ -1,91 +1,51 @@
 import { useEffect, useState } from "react";
 import Masterpage from "../../components/Masterpage";
-import { UserAuth } from "../../context/AuthContext";
 import MessageCard from "../../components/MessageCard";
-import { Box, Grid, Paper, Stack, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Grid,
+  Paper,
+  Stack,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { Link } from "react-router-dom";
+import { Chats as ChatContext } from "../../context/ChatContext";
+import ChatCard from "../../components/ChatCard";
+import { Send } from "@mui/icons-material";
 
 export default function Chats() {
-  const { getProfile } = UserAuth();
   const [chats, setChats] = useState([]);
   const [messages, setMessages] = useState([]);
+  const { getChats, sendMessage, getMessagesByChat } = ChatContext();
+  const [newMessage, setNewMessage] = useState("");
+  const [selectedChat, setSelectedChat] = useState(null);
 
   useEffect(() => {
-    getProfile().then((profile) =>
-      setMessages([
-        {
-          from: profile,
-          state: "read",
-          body: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Fames ac turpis egestas integer eget aliquet nibh.",
-        },
-        {
-          from: { ...profile, uid: "01J36FE8NNQ1Q068XWX6EDFFSH" },
-          state: "read",
-          body: "Porttitor lacus luctus accumsan tortor posuere ac ut. At elementum eu facilisis sed odio morbi quis commodo odio.",
-        },
-        {
-          from: profile,
-          state: "read",
-          body: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Fames ac turpis egestas integer eget aliquet nibh.",
-        },
-        {
-          from: { ...profile, uid: "01J36FE8NNQ1Q068XWX6EDFFSH" },
-          state: "unread",
-          body: "Porttitor lacus luctus accumsan tortor posuere ac ut. At elementum eu facilisis sed odio morbi quis commodo odio.",
-        },
-        {
-          from: profile,
-          state: "read",
-          body: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Fames ac turpis egestas integer eget aliquet nibh.",
-        },
-        {
-          from: { ...profile, uid: "01J36FE8NNQ1Q068XWX6EDFFSH" },
-          state: "unread",
-          body: "Porttitor lacus luctus accumsan tortor posuere ac ut. At elementum eu facilisis sed odio morbi quis commodo odio.",
-        },
-        {
-          from: profile,
-          state: "unread",
-          body: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Fames ac turpis egestas integer eget aliquet nibh.",
-        },
-        {
-          from: { ...profile, uid: "01J36FE8NNQ1Q068XWX6EDFFSH" },
-          state: "read",
-          body: "Porttitor lacus luctus accumsan tortor posuere ac ut. At elementum eu facilisis sed odio morbi quis commodo odio.",
-        },
-        {
-          from: profile,
-          state: "unread",
-          body: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Fames ac turpis egestas integer eget aliquet nibh.",
-        },
-        {
-          from: { ...profile, uid: "01J36FE8NNQ1Q068XWX6EDFFSH" },
-          state: "unread",
-          body: "Porttitor lacus luctus accumsan tortor posuere ac ut. At elementum eu facilisis sed odio morbi quis commodo odio.",
-        },
-        {
-          from: profile,
-          state: "unread",
-          body: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Fames ac turpis egestas integer eget aliquet nibh.",
-        },
-        {
-          from: { ...profile, uid: "01J36FE8NNQ1Q068XWX6EDFFSH" },
-          state: "unread",
-          body: "Porttitor lacus luctus accumsan tortor posuere ac ut. At elementum eu facilisis sed odio morbi quis commodo odio.",
-        },
-        {
-          from: profile,
-          state: "unread",
-          body: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Fames ac turpis egestas integer eget aliquet nibh.",
-        },
-        {
-          from: { ...profile, uid: "01J36FE8NNQ1Q068XWX6EDFFSH" },
-          state: "unread",
-          body: "Porttitor lacus luctus accumsan tortor posuere ac ut. At elementum eu facilisis sed odio morbi quis commodo odio.",
-        },
-      ])
-    );
-  }, [getProfile]);
+    getChats(setChats);
+  }, [getChats, setChats]);
+
+  useEffect(() => {
+    async function loadMessages() {
+      if (selectedChat) {
+        const messages = await getMessagesByChat(selectedChat);
+        setMessages(messages);
+      }
+    }
+    loadMessages();
+  }, [selectedChat, getMessagesByChat]);
+
+  const handleSendMessage = async (e) => {
+    e.preventDefault();
+    if (newMessage && selectedChat) {
+      await sendMessage(selectedChat, newMessage);
+      const messages = await getMessagesByChat(selectedChat);
+      setMessages(messages);
+      setNewMessage("");
+    }
+  };
+
   return (
     <Masterpage title={"Chats"}>
       <Grid container spacing={2} direction="row" alignItems="stretch">
@@ -102,6 +62,19 @@ export default function Chats() {
                   chat!
                 </Typography>
               )}
+              {chats &&
+                Array.isArray(chats) &&
+                chats.map((chat) => (
+                  <ChatCard
+                    key={chat.id}
+                    id={chat.id}
+                    to={chat.recipient}
+                    from={chat.sender}
+                    subject={chat.subject}
+                    setMessages={setMessages}
+                    setSelectedChat={setSelectedChat}
+                  />
+                ))}
             </Stack>
           </Paper>
         </Grid>
@@ -116,22 +89,49 @@ export default function Chats() {
             }}
           >
             <Grid container spacing={2}>
-              {chats &&
-                chats.length > 0 &&
-                (!messages || messages.length === 0) && (
-                  <Typography variant="subtitle1">
-                    Select a conversation to view
-                  </Typography>
-                )}
+              <Grid item xs={12}>
+                {chats &&
+                  chats.length > 0 &&
+                  (!messages || messages.length === 0) && (
+                    <Typography variant="subtitle1">
+                      Select a conversation to view
+                    </Typography>
+                  )}
 
-              {messages.map((chat) => (
-                <MessageCard
-                  from={chat.from}
-                  to={chat.to}
-                  body={chat.body}
-                  state={chat.state}
-                />
-              ))}
+                {messages &&
+                  Array.isArray(messages) &&
+                  messages.length > 0 &&
+                  messages.map((message) => (
+                    <MessageCard
+                      key={message.id}
+                      from={message.sentBy}
+                      body={message.body}
+                      state={message.state}
+                      date={message.timestamp}
+                    />
+                  ))}
+              </Grid>
+              <Grid item xs={12}>
+                <form noValidate onSubmit={handleSendMessage}>
+                  <TextField
+                    fullWidth
+                    type="search"
+                    label="Message"
+                    helperText="Enter your reply above"
+                    disabled={!selectedChat}
+                    value={newMessage}
+                    onChange={(e) => setNewMessage(e.target.value)}
+                  />
+                  <Button
+                    variant="contained"
+                    type="submit"
+                    endIcon={<Send />}
+                    disabled={!selectedChat}
+                  >
+                    Send
+                  </Button>
+                </form>
+              </Grid>
             </Grid>
           </Paper>
         </Grid>

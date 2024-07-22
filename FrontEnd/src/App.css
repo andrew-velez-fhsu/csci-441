@@ -93,7 +93,11 @@ textarea {
 }
 
 .chat-card{
-  margin: 1rem;
   padding: 0.5rem;
   width: 100%;
+  display: flex;
+  
+}
+.chat-card:hover{
+  cursor:pointer;
 }

@@ -12,6 +12,8 @@ import java.util.List;
 public interface ChatRepository extends CrudRepository<Chat, Integer> {
 
     @Query("select c From Chat c Where sender = :sender and recipient = :recipient")
-    List<Chat> findByUsersId(@Param("recipient") User recipient, @Param("sender") Authentication sender);
+    List<Chat> findByParticipants(@Param("recipient") User recipient, @Param("sender") Authentication sender);
 
+    @Query("SELECT c From Chat c WHERE sender = :user or recipient = :user")
+    List<Chat> findByUser(@Param("user") User user);
 }

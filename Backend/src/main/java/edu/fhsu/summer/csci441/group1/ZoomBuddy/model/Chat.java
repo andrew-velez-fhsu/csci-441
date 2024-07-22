@@ -6,6 +6,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "chats")
 public class Chat {
@@ -21,7 +23,8 @@ public class Chat {
     @JoinColumn(name = "recipientUid")
     private User recipient;
 
-    @OneToMany
+    @OneToMany(mappedBy = "chat")
+    @JsonIgnore
     private List<Message> messages = new ArrayList<>();
 
     private LocalDateTime date;
