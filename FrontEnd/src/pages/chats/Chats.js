@@ -48,7 +48,13 @@ export default function Chats() {
 
   return (
     <Masterpage title={"Chats"}>
-      <Grid container spacing={2} direction="row" alignItems="stretch">
+      <Grid
+        container
+        display="flex"
+        spacing={2}
+        direction="row"
+        alignItems="stretch"
+      >
         <Grid item xs={12} md={4}>
           <Paper sx={{ minHeight: "100%", padding: "20px" }}>
             <Stack direction="column">
@@ -81,11 +87,10 @@ export default function Chats() {
         <Grid item xs={12} md={8}>
           <Paper
             sx={{
-              minHeight: "100%",
               padding: "20px",
               backgroundColor: "#f7f7f7",
               overflowY: "auto",
-              height: "1px",
+              maxHeight: "70vh",
             }}
           >
             <Grid container spacing={2}>

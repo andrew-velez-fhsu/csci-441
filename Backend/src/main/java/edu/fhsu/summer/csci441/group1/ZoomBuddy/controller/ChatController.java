@@ -14,7 +14,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -78,9 +77,6 @@ public class ChatController {
 
         var chat = chatRepository.findById(chatId).orElseThrow();
         // Check if the user is a participant in the chat
-        // TODO - after convert chat.sender and chat.recipient to user\
-        // NOTE - you do this multiple times, you should put this into a separate
-        // private method
         if (!chat.getSender().getUid().equals(user.getUid()) && !chat.getRecipient().getUid().equals((user.getUid())))
             throw new RuntimeException("User is not a participant in the chat");
 
@@ -114,10 +110,10 @@ public class ChatController {
         var chat = chatRepository.findById(chatId).orElseThrow();
 
         // Check if the user is a participant in the chat
-        // TODO: fix after chat.sender and chat.recepient is converted to user
-        // if (!chat.getRecipientUid().contains((CharSequence) sender)) {
-        // throw new RuntimeException("User is not a participant in the chat");
-        // }
+        if (!chat.getSender().getUid().equals(sender.getUid())
+                && !chat.getRecipient().getUid().equals((sender.getUid())))
+            throw new RuntimeException("User is not a participant in the chat");
+
         // Set the message properties
         var message = new Message();
         message.setSentBy(sender);

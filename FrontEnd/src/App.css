@@ -81,7 +81,6 @@ textarea {
   margin-left: 5rem;
   margin-right: 1rem;
   padding: 0.5rem;
-  width: 100%;
 }
 
 .message-theirs{
@@ -89,7 +88,6 @@ textarea {
   margin-right: 5rem;
   margin-left: 1rem;
   padding: 0.5rem;
-  width: 100%;
 }
 
 .chat-card{

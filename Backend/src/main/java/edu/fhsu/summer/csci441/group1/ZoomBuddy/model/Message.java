@@ -2,7 +2,6 @@ package edu.fhsu.summer.csci441.group1.ZoomBuddy.model;
 
 import jakarta.persistence.*;
 
-import java.sql.Date;
 import java.time.LocalDateTime;
 
 @Entity
