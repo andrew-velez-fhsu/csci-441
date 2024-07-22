@@ -4,7 +4,10 @@ import Header from "./Header";
 
 export default function Masterpage({ title, children }) {
   return (
-    <Container maxWidth="lg">
+    <Container
+      maxWidth="lg"
+      sx={{ flexDirection: "column", flexGrow: 1, maxHeight: "100vh" }}
+    >
       <Paper>
         <Header />
         <Container>

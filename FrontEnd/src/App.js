@@ -15,6 +15,8 @@ import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import NotFound from "./pages/notFound/NotFound";
 import BuddyDetails from "./pages/buddies/BuddyDetails";
+import Chats from "./pages/chats/Chats";
+import { ChatContextProvider } from "./context/ChatContext";
 
 function App() {
   return (
@@ -22,41 +24,51 @@ function App() {
       <AuthContextProvider>
         <StorageContextProvider>
           <PetsContextProvider>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <BrowserRouter>
-                <Routes>
-                  <Route path="/" element={<Home />} />
-                  <Route path="/search" element={<Search />} />
-                  <Route path="/details" element={<Details />} />
-                  <Route
-                    path="/profile"
-                    element={
-                      <ProtectedRoute>
-                        <Profile />
-                      </ProtectedRoute>
-                    }
-                  />
-                  <Route
-                    path="/buddies"
-                    element={
-                      <ProtectedRoute>
-                        <Buddies />
-                      </ProtectedRoute>
-                    }
-                  />
-                  <Route
-                    path="/buddies/:id"
-                    element={
-                      <ProtectedRoute>
-                        <BuddyDetails />
-                      </ProtectedRoute>
-                    }
-                  />
-                  <Route path="/profile/create" element={<CreateAccount />} />
-                  <Route path="*" element={<NotFound />} />
-                </Routes>
-              </BrowserRouter>
-            </LocalizationProvider>
+            <ChatContextProvider>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <BrowserRouter>
+                  <Routes>
+                    <Route path="/" element={<Home />} />
+                    <Route path="/search" element={<Search />} />
+                    <Route path="/details" element={<Details />} />
+                    <Route
+                      path="/profile"
+                      element={
+                        <ProtectedRoute>
+                          <Profile />
+                        </ProtectedRoute>
+                      }
+                    />
+                    <Route
+                      path="/chats"
+                      element={
+                        <ProtectedRoute>
+                          <Chats />
+                        </ProtectedRoute>
+                      }
+                    />
+                    <Route
+                      path="/buddies"
+                      element={
+                        <ProtectedRoute>
+                          <Buddies />
+                        </ProtectedRoute>
+                      }
+                    />
+                    <Route
+                      path="/buddies/:id"
+                      element={
+                        <ProtectedRoute>
+                          <BuddyDetails />
+                        </ProtectedRoute>
+                      }
+                    />
+                    <Route path="/profile/create" element={<CreateAccount />} />
+                    <Route path="*" element={<NotFound />} />
+                  </Routes>
+                </BrowserRouter>
+              </LocalizationProvider>
+            </ChatContextProvider>
           </PetsContextProvider>
         </StorageContextProvider>
       </AuthContextProvider>

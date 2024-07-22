@@ -16,7 +16,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/search").permitAll()
                         .requestMatchers("/users/**").authenticated()
-                        .requestMatchers("/pets/**").authenticated())
+                        .requestMatchers("/pets/**").authenticated()
+                        .requestMatchers("/chats/**").authenticated())
                 .oauth2ResourceServer((oauth2) -> oauth2.jwt(Customizer.withDefaults()));
         return http.build();
     }

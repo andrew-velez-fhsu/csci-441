@@ -1,7 +1,5 @@
 package edu.fhsu.summer.csci441.group1.ZoomBuddy.model;
 
-import java.util.List;
-
 import org.locationtech.jts.geom.Point;
 
 import jakarta.persistence.*;

@@ -2,7 +2,7 @@ package edu.fhsu.summer.csci441.group1.ZoomBuddy.model;
 
 import jakarta.persistence.*;
 
-import java.sql.Date;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "messages")
@@ -11,12 +11,15 @@ public class Message {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 
     private int id;
-    private int threadId;
-    private String senderUid;
-    private String recipientUid;
+    @ManyToOne
+    @JoinColumn(name = "chatId")
+    private Chat chat;
+    @ManyToOne
+    @JoinColumn(name = "senderUid")
+    private User sentBy;
     private String body;
     private String status;
-    private Date date;
+    private LocalDateTime timestamp;
 
     // constructor here
     public Message() {
@@ -29,30 +32,6 @@ public class Message {
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public int getThreadId() {
-        return threadId;
-    }
-
-    public void setThreadId(int threadId) {
-        this.threadId = threadId;
-    }
-
-    public String getSenderUid() {
-        return senderUid;
-    }
-
-    public void setSenderUid(String senderUid) {
-        this.senderUid = senderUid;
-    }
-
-    public String getRecipientUid() {
-        return recipientUid;
-    }
-
-    public void setRecipientUid(String recipientUid) {
-        this.recipientUid = recipientUid;
     }
 
     public String getBody() {
@@ -71,11 +50,27 @@ public class Message {
         this.status = status;
     }
 
-    public Date getDate() {
-        return date;
+    public LocalDateTime getTimestamp() {
+        return timestamp;
     }
 
-    public void setDate(Date date) {
-        this.date = date;
+    public void setTimestamp(LocalDateTime timestamp) {
+        this.timestamp = timestamp;
+    }
+
+    public Chat getChat() {
+        return chat;
+    }
+
+    public void setChat(Chat chat) {
+        this.chat = chat;
+    }
+
+    public User getSentBy() {
+        return sentBy;
+    }
+
+    public void setSentBy(User sentBy) {
+        this.sentBy = sentBy;
     }
 }
