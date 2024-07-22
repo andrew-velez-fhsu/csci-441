@@ -115,6 +115,11 @@ export default function Header() {
                           </Link>
                         </li>
                         <li>
+                          <Link className="navItem" to="/chats">
+                            Chats
+                          </Link>
+                        </li>
+                        <li>
                           <Link className="navItem" to="/buddies">
                             My Buddies
                           </Link>

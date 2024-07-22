@@ -100,12 +100,10 @@ CREATE TABLE IF NOT EXISTS public.photos(
 
 -- This will allow the user to do all actions on all tables
 GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public to web;
-GRANT USAGE ON SEQUENCE users_id_seq TO web;
 GRANT USAGE ON SEQUENCE pets_id_seq TO web;
 GRANT USAGE ON SEQUENCE messages_id_seq TO web;
 GRANT USAGE ON SEQUENCE chats_id_seq TO web;
 GRANT USAGE ON SEQUENCE photos_id_seq TO web;
-
 
 -- ADD Location awareness to USERS
 BEGIN TRANSACTION;
@@ -169,3 +167,7 @@ ADD COLUMN senderUid VARCHAR NOT NULL CONSTRAINT FK_Sender   REFERENCES users(ui
 ALTER TABLE public.chats
 DROP COLUMN messages;
 COMMIT;
+
+BEGIN TRANSACTION;
+GRANT USAGE ON SEQUENCE chats_id_seq TO web;
+GRANT USAGE ON SEQUENCE messages_id_seq TO web;

@@ -2,22 +2,18 @@ package edu.fhsu.summer.csci441.group1.ZoomBuddy.controller;
 
 import edu.fhsu.summer.csci441.group1.ZoomBuddy.data.ChatRepository;
 import edu.fhsu.summer.csci441.group1.ZoomBuddy.data.MessagesRepository;
+import edu.fhsu.summer.csci441.group1.ZoomBuddy.data.PetsRepository;
 import edu.fhsu.summer.csci441.group1.ZoomBuddy.data.UsersRepository;
+import edu.fhsu.summer.csci441.group1.ZoomBuddy.entities.CreateChatRequest;
 import edu.fhsu.summer.csci441.group1.ZoomBuddy.model.Chat;
 import edu.fhsu.summer.csci441.group1.ZoomBuddy.model.Message;
-import edu.fhsu.summer.csci441.group1.ZoomBuddy.model.Pet;
 import edu.fhsu.summer.csci441.group1.ZoomBuddy.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @RestController
@@ -28,41 +24,43 @@ public class ChatController {
     private ChatRepository chatRepository;
     private UsersRepository usersRepository;
     private MessagesRepository messagesRepository;
+    private PetsRepository petsRepository;
 
     public ChatController(UsersRepository usersRepository, ChatRepository chatRepository,
-            MessagesRepository messagesRepository) {
+            MessagesRepository messagesRepository, PetsRepository petsRepository) {
         this.usersRepository = usersRepository;
         this.chatRepository = chatRepository;
         this.messagesRepository = messagesRepository;
+        this.petsRepository = petsRepository;
     }
 
     @PostMapping("/chats")
-    public Chat createChat(Authentication sender, User recipient, Pet subjectPet, Message message) {
-        // TODO: the below isn't needed, delete it
-        // Chat isExist = chatRepository.findChatByUsersId(recipient, sender);
-
-        // if (isExist != null) {
-        // return isExist;
-        // }
-
-        // TODO: check that recipient, pet and message are not null. If null, return
-        // client request error
-
+    public Chat createChat(Authentication auth, @RequestBody CreateChatRequest createChatRequest) {
+        // get the pet
+        var subjectPet = petsRepository.findById(createChatRequest.getPetId()).orElseThrow();
+        // get the sender and the recipient
+        var sender = usersRepository.findById(auth.getName()).orElseThrow();
+        var recipient = subjectPet.getOwner();
         // create the subject
         var subject = String.format("Chat about %s", subjectPet.getName());
-        Chat chat = new Chat(); // create new chat
 
-        chat.setTimestamp(LocalDateTime.now());
+        // create new chat
+        Chat chat = new Chat();
+
+        chat.setDate(LocalDateTime.now());
         chat.setSubject(subject);
-
+        chat.setRecipient(recipient);
+        chat.setSender(sender);
         // Save the chat to get the generated ID
-        // chat = chatRepository.save(chat);
+        chat = chatRepository.save(chat);
+
+        var message = new Message();
 
         // Create and save the initial message
-        message.setSendBy(message.getSendBy());
-        message.setChatId(message.getChatId());
-        message.setBody(message.getBody());
-        message.setStatus(message.getStatus());
+        message.setSentBy(sender);
+        message.setChat(chat);
+        message.setBody(createChatRequest.getMessage());
+        message.setStatus("unread");
         message.setTimestamp(LocalDateTime.now());
 
         messagesRepository.save(message);
@@ -85,7 +83,7 @@ public class ChatController {
         if (!chat.getSender().getUid().equals(user.getUid()))
             throw new RuntimeException("User is not a participant in the chat");
 
-        List<Message> messages = chat.getMessages();//chatRepository.findByUsersId(auth.getName());
+        List<Message> messages = chat.getMessages();// chatRepository.findByUsersId(auth.getName());
 
         return messages;
     }
@@ -96,25 +94,21 @@ public class ChatController {
     public List<Chat> getChatsForCurrentUser(Authentication auth) {
         // TODO: get all chats where user is either sender or recipient
         var chats = new ArrayList<Chat>();// replace stub with this.chatRepository.NEED_NEW_METHOD
-        if (chats != null) {
-            return chats;
-        } else
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "Message not found");
+        return chats;
     }
 
     // Reply to chat
     // ========================================================================
     @PostMapping("/chats/{chatId}/messages")
-    public void replyToChat(Authentication sender, @PathVariable("chatId") Integer chatId,
-            @RequestBody Message message) {
+    public void replyToChat(Authentication auth, @PathVariable("chatId") Integer chatId,
+            @RequestBody String messageText) {
         // Retrieve the authenticated user
-        String uid = sender.getName();
-        User senders = usersRepository.findById(uid)
+        String uid = auth.getName();
+        User sender = usersRepository.findById(uid)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         // get the chat by id
-        var chat = chatRepository.findById(chatId);
+        var chat = chatRepository.findById(chatId).orElseThrow();
 
         // Check if the user is a participant in the chat
         // TODO: fix after chat.sender and chat.recepient is converted to user
@@ -122,9 +116,10 @@ public class ChatController {
         // throw new RuntimeException("User is not a participant in the chat");
         // }
         // Set the message properties
-        message.setSendBy(message.getSendBy());
-        message.setChatId(message.getChatId());
-        message.setBody(message.getBody());
+        var message = new Message();
+        message.setSentBy(sender);
+        message.setChat(chat);
+        message.setBody(messageText);
         message.setTimestamp(LocalDateTime.now());
 
         // Save the message

@@ -12,10 +12,12 @@ public class Message {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 
     private int id;
-    // TODO - convert to many to one chat
-    private int chatId;
-    private String sendBy;
-//    private String recipientUid;
+    @ManyToOne
+    @JoinColumn(name = "chatId")
+    private Chat chat;
+    @ManyToOne
+    @JoinColumn(name = "senderUid")
+    private User sentBy;
     private String body;
     private String status;
     private LocalDateTime timestamp;
@@ -32,30 +34,6 @@ public class Message {
     public void setId(int id) {
         this.id = id;
     }
-
-    public int getChatId() {
-        return chatId;
-    }
-
-    public void setChatId(int chatId) {
-        this.chatId = chatId;
-    }
-
-    public String getSendBy() {
-        return sendBy;
-    }
-
-    public void setSendBy(String sendBy) {
-        this.sendBy = sendBy;
-    }
-
-//    public String getRecipientUid() {
-//        return recipientUid;
-//    }
-//
-//    public void setRecipientUid(String recipientUid) {
-//        this.recipientUid = recipientUid;
-//    }
 
     public String getBody() {
         return body;
@@ -81,4 +59,19 @@ public class Message {
         this.timestamp = timestamp;
     }
 
+    public Chat getChat() {
+        return chat;
+    }
+
+    public void setChat(Chat chat) {
+        this.chat = chat;
+    }
+
+    public User getSentBy() {
+        return sentBy;
+    }
+
+    public void setSentBy(User sentBy) {
+        this.sentBy = sentBy;
+    }
 }

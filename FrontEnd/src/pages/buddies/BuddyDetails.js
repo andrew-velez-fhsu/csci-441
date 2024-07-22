@@ -13,6 +13,7 @@ import {
   DialogTitle,
   Grid,
   Paper,
+  Snackbar,
   Stack,
   TextField,
   Typography,
@@ -25,18 +26,29 @@ import {
   Place,
 } from "@mui/icons-material";
 import { IconBone } from "@tabler/icons-react";
+import { Chats } from "../../context/ChatContext";
 
 export default function BuddyDetails() {
   const { id } = useParams();
   const [buddy, setBuddy] = useState(null);
+  const [isSent, setIsSent] = useState(false);
   const [showContactModal, setShowContactModal] = useState(false);
   const { getPet } = Pets();
+  const { createChat } = Chats();
+  const [message, setMessage] = useState();
 
   useEffect(() => {
     getPet(id).then((data) => setBuddy(data));
   }, [getPet, id]);
 
   const handleCloseContactModal = () => {
+    setShowContactModal(false);
+  };
+
+  const handleSendMessage = async () => {
+    await createChat(message, id);
+    setMessage("");
+    setIsSent(true);
     setShowContactModal(false);
   };
 
@@ -71,6 +83,13 @@ export default function BuddyDetails() {
           >
             Have your people call my people!
           </Button>
+          <Snackbar
+            open={isSent}
+            autoHideDuration={5000}
+            onClose={() => setIsSent(false)}
+            message="Message Sent!"
+            anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+          />
           <Dialog
             open={showContactModal}
             onClose={handleCloseContactModal}
@@ -78,7 +97,7 @@ export default function BuddyDetails() {
               component: "form",
               onSubmit: (e) => {
                 e.preventDefault();
-                handleCloseContactModal();
+                handleSendMessage();
               },
             }}
           >
@@ -96,6 +115,8 @@ export default function BuddyDetails() {
                 multiline
                 fullWidth
                 minRows={2}
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
               />
             </DialogContent>
             <DialogActions>

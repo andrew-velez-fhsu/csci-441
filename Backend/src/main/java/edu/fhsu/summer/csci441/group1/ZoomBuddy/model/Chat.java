@@ -20,11 +20,11 @@ public class Chat {
     @ManyToOne
     @JoinColumn(name = "recipientUid")
     private User recipient;
-   
+
     @OneToMany
     private List<Message> messages = new ArrayList<>();
 
-    private LocalDateTime timestamp;
+    private LocalDateTime date;
 
     public Integer getId() {
         return id;
@@ -66,12 +66,12 @@ public class Chat {
         this.messages = messages;
     }
 
-    public LocalDateTime getTimestamp() {
-        return timestamp;
+    public LocalDateTime getDate() {
+        return date;
     }
 
-    public void setTimestamp(LocalDateTime timestamp) {
-        this.timestamp = timestamp;
+    public void setDate(LocalDateTime date) {
+        this.date = date;
     }
 
 }
